@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "38732738414",
+    "project_id": "the-tinhluok-142905"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38732738414:android:3dff7529d712928d",
+        "android_client_info": {
+          "package_name": "com.hammersmith.thetinhluok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38732738414-r9ji4pl9ub3tb7pushk9r45jtk4jpp7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hammersmith.thetinhluok",
+            "certificate_hash": "9128A4CFEE443AE2158530A26165C3184E9F9F19"
+          }
+        },
+        {
+          "client_id": "38732738414-5r4iccc6ctrflebkcv5o761pu2724rdl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8p-d6iBLSy-cxO4wpLHveq1GaulmyGx0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
