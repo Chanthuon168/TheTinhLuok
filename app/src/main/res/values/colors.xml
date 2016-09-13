@@ -12,6 +12,7 @@
     <color name="album_title">#4c4c4c</color>
     <color name="transparent_dark">#50000000</color>
     <color name="red">#cf1111</color>
+    <color name="report_pressed">#e92222</color>
     <color name="gray_light">#f1efef</color>
     <color name="primary_text">#202020</color>
     <color name="black">#000000</color>

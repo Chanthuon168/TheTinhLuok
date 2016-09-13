@@ -39,7 +39,6 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.MyVi
     private List<Promotion> promotions;
     private Promotion promotion;
     private PopupWindow popWindow;
-    private ListView simpleList;
     private CommentAdapter commentAdapter;
     private List<Comment> comments = new ArrayList<>();
     private Comment comment;
