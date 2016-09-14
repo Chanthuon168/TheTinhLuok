@@ -8,88 +8,94 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp">
-
-                <com.hammersmith.thetinhluok.ViewBannerGallery
-                    android:id="@+id/viewBannerGallery"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </com.hammersmith.thetinhluok.ViewBannerGallery>
-            </LinearLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif-light"
-                    android:padding="10dp"
-                    android:text="Special Promotion"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp" />
+                    android:layout_height="150dp">
+
+                    <com.hammersmith.thetinhluok.ViewBannerGallery
+                        android:id="@+id/viewBannerGallery"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </com.hammersmith.thetinhluok.ViewBannerGallery>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <HorizontalScrollView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none">
+                        android:background="@color/white"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="10dp"
+                        android:text="Special Promotion"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recyclerViewPromotion"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none">
 
-                        </android.support.v7.widget.RecyclerView>
-                    </HorizontalScrollView>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerViewPromotion"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </android.support.v7.widget.RecyclerView>
+                        </HorizontalScrollView>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:fontFamily="sans-serif-light"
-                    android:padding="10dp"
-                    android:text="Recently Added"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="10dp"
+                        android:text="Recently Added"
+                        android:textColor="@color/primary_text"
+                        android:textSize="16sp" />
 
-                </android.support.v7.widget.RecyclerView>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

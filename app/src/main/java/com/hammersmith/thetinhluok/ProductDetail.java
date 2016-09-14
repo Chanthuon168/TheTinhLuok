@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hammersmith.thetinhluok.adapter.CommentAdapter;
 import com.hammersmith.thetinhluok.adapter.ImageAdapter;
@@ -42,6 +43,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private CommentAdapter commentAdapter;
     private List<Comment> comments = new ArrayList<>();
     private Comment comment;
+    private int proId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.l_contact).setOnClickListener(this);
         findViewById(R.id.l_add_to_favorite).setOnClickListener(this);
         findViewById(R.id.l_comment).setOnClickListener(this);
+
+        proId = getIntent().getIntExtra("pro_id",0);
+        Toast.makeText(getApplicationContext(), proId+"",Toast.LENGTH_LONG).show();
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         adapter = new ImageAdapter(this, images);

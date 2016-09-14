@@ -21,20 +21,20 @@
         android:visibility="visible">
 
         <LinearLayout
-            android:gravity="center_vertical"
             android:id="@+id/layout_subtitle"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:background="#55000000"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:spacing="16dp">
 
             <TextView
                 android:id="@+id/tv_subtitle"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="13dip"
                 android:text=""
@@ -44,18 +44,18 @@
         <LinearLayout
             android:id="@+id/layout_dots"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="25dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical"
             android:layout_marginRight="13dip"
+            android:gravity="center_vertical"
             android:orientation="horizontal" />
     </RelativeLayout>
 
     <TextView
-        android:layout_width="match_parent"
         android:id="@+id/tv_hint"
-        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_height="match_parent" />
+        android:gravity="center" />
 </RelativeLayout>

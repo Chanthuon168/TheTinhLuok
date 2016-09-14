@@ -2,13 +2,18 @@ package com.hammersmith.thetinhluok.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.hammersmith.thetinhluok.ApiClient;
 import com.hammersmith.thetinhluok.R;
 import com.hammersmith.thetinhluok.model.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,7 +38,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
 
     @Override
     public void onBindViewHolder(MyViewAdapter holder, int position) {
-
+        Uri uri = Uri.parse(ApiClient.BASE_URL + products.get(position).getImage());
+        context = holder.image.getContext();
+        Picasso.with(context).load(uri).into(holder.image);
+        holder.price.setText("$"+products.get(position).getPrice());
+        holder.discount.setText("("+products.get(position).getDiscount()+"% OFF)");
     }
 
     @Override
@@ -42,8 +51,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
     }
 
     public class MyViewAdapter extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView price, discount;
         public MyViewAdapter(View itemView) {
             super(itemView);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            price = (TextView) itemView.findViewById(R.id.price);
+            discount = (TextView) itemView.findViewById(R.id.discount);
+
         }
     }
 }

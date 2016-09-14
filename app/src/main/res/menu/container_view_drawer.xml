@@ -3,33 +3,44 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_home"
+            android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_products"
+            android:title="Products" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_sell"
+            android:title="Sell Product" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="My account">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Log out" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_account"
+                    android:title="Account" />
+                <item
+                    android:id="@+id/nav_my_product"
+                    android:title="My products" />
+                <item
+                    android:id="@+id/nav_favorite"
+                    android:title="Favorites" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:title="Log out" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Setting">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_about"
+                    android:title="About us" />
+                <item
+                    android:id="@+id/nav_language"
+                    android:title="Language" />
+            </group>
         </menu>
     </item>
 

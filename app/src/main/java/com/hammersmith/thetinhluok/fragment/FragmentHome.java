@@ -1,24 +1,38 @@
 package com.hammersmith.thetinhluok.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hammersmith.thetinhluok.ApiClient;
+import com.hammersmith.thetinhluok.ApiInterface;
 import com.hammersmith.thetinhluok.R;
 import com.hammersmith.thetinhluok.ViewBannerGallery;
 import com.hammersmith.thetinhluok.adapter.ProductAdapter;
 import com.hammersmith.thetinhluok.adapter.PromotionAdapter;
 import com.hammersmith.thetinhluok.model.Product;
 import com.hammersmith.thetinhluok.model.Promotion;
+import com.joanzapata.iconify.widget.IconTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Chan Thuon on 9/9/2016.
@@ -28,11 +42,13 @@ public class FragmentHome extends Fragment {
     private ProductAdapter adapter;
     private Product product;
     private List<Product> products = new ArrayList<>();
-    private Promotion promotion;
-    private List<Promotion> promotions = new ArrayList<>();
+    private Product promotion;
+    private List<Product> promotions = new ArrayList<>();
     private RecyclerView recyclerView, recyclerViewPromotion;
     private PromotionAdapter promotionAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private SwipeRefreshLayout swipeRefresh;
+    private int sizePromotion, sizeProduct;
 
     public FragmentHome() {
 
@@ -45,38 +61,158 @@ public class FragmentHome extends Fragment {
 
         ViewBannerGallery viewBannerGallery = (ViewBannerGallery) root.findViewById(R.id.viewBannerGallery);
         ArrayList<ViewBannerGallery.BannerItem> listData = new ArrayList<ViewBannerGallery.BannerItem>();
-        listData.add(viewBannerGallery.new BannerItem("http://www.angkorfocus.com/userfiles/banner_phnom_penh_heart_city.jpg", "http://www.angkorfocus.com", "Phnom Penh"));
-        listData.add(viewBannerGallery.new BannerItem("http://www.angkorfocus.com/userfiles/banner_siem_reap_angkor_wat(1).jpg", "http://www.angkorfocus.com", "Angkor Wat"));
-        listData.add(viewBannerGallery.new BannerItem("http://www.angkorfocus.com/userfiles/banner_beach-break-sihanoukville.jpg", "http://www.angkorfocus.com", "Sihanoukville"));
-        listData.add(viewBannerGallery.new BannerItem("http://www.angkorfocus.com/userfiles/banner_kep_city.jpg", "http://www.angkorfocus.com", "Kep"));
+        listData.add(viewBannerGallery.new BannerItem("http://www.bdonlinemart.com/content/images/thumbs/0002578_electronics.jpeg", "http://www.bdonlinemart.com", "Electronic Shop"));
+        listData.add(viewBannerGallery.new BannerItem("http://www.sushmii.com/image/cache/data/Home%20page%20Banner/slide%203-960x400.jpg", "http://www.sushmii.com", "Jewellery Shop"));
+        listData.add(viewBannerGallery.new BannerItem("http://www.gobeautyvoice.com/images/beauty_banner11.jpg", "http://www.gobeautyvoice.com", "Beauty Shop"));
+        listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
         viewBannerGallery.flip(listData, true);
 
+        swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
         recyclerViewPromotion = (RecyclerView) root.findViewById(R.id.recyclerViewPromotion);
-        promotionAdapter = new PromotionAdapter(getActivity(), promotions);
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPromotion.setLayoutManager(linearLayoutManager);
-        recyclerViewPromotion.setAdapter(promotionAdapter);
-        recyclerViewPromotion.setHasFixedSize(true);
-        for (int a = 0; a < 5; a++) {
-            promotion = new Promotion();
-            promotion.setId(1);
-            promotions.add(promotion);
-        }
-        promotionAdapter.notifyDataSetChanged();
 
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-        adapter = new ProductAdapter(getActivity(), products);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        for (int i = 0; i < 10; i++) {
-            product = new Product();
-            product.setId(1);
-            products.add(product);
-        }
-        adapter.notifyDataSetChanged();
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPromotion();
+                refreshProduct();
+            }
+        });
+
+        ApiInterface serviceSpecialPromotion = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Product>> callPromotion = serviceSpecialPromotion.getSpecialPromotion();
+        callPromotion.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                promotions = response.body();
+                sizePromotion = promotions.size();
+                promotionAdapter = new PromotionAdapter(getActivity(), promotions);
+                recyclerViewPromotion.setAdapter(promotionAdapter);
+                recyclerViewPromotion.setHasFixedSize(true);
+                promotionAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        ApiInterface serviceRecentlyAdded = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Product>> callRecentlyAdded = serviceRecentlyAdded.getRecentlyAdded();
+        callRecentlyAdded.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                products = response.body();
+                sizeProduct = products.size();
+                layoutManager = new GridLayoutManager(getActivity(), 2);
+                recyclerView.setLayoutManager(layoutManager);
+                adapter = new ProductAdapter(getActivity(), products);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setHasFixedSize(true);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
+
+        root.setFocusableInTouchMode(true);
+        root.requestFocus();
+        root.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialogExit("Are you sure want to exit this app?");
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
 
         return root;
+    }
+
+    private void dialogExit(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-times-circle}");
+        TextView activate = (TextView) viewDialog.findViewById(R.id.ok);
+        activate.setText("Ok");
+        activate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+        viewDialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void refreshPromotion() {
+        ApiInterface serviceSpecialPromotion = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Product>> callPromotion = serviceSpecialPromotion.getSpecialPromotion();
+        callPromotion.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                promotions = response.body();
+                if (sizePromotion != promotions.size()) {
+                    promotionAdapter = new PromotionAdapter(getActivity(), promotions);
+                    recyclerViewPromotion.setAdapter(promotionAdapter);
+                    recyclerViewPromotion.setHasFixedSize(true);
+                    promotionAdapter.notifyDataSetChanged();
+                }
+                sizePromotion = promotions.size();
+                swipeRefresh.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void refreshProduct() {
+        ApiInterface serviceRecentlyAdded = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Product>> callRecentlyAdded = serviceRecentlyAdded.getRecentlyAdded();
+        callRecentlyAdded.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                products = response.body();
+                if (products.size() != sizeProduct) {
+                    layoutManager = new GridLayoutManager(getActivity(), 2);
+                    recyclerView.setLayoutManager(layoutManager);
+                    adapter = new ProductAdapter(getActivity(), products);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setHasFixedSize(true);
+                    adapter.notifyDataSetChanged();
+                }
+                sizeProduct = products.size();
+                swipeRefresh.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
     }
 }
