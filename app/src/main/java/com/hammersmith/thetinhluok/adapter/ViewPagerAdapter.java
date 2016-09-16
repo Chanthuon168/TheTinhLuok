@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.hammersmith.thetinhluok.ApiClient;
 import com.hammersmith.thetinhluok.R;
+import com.hammersmith.thetinhluok.model.Image;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,9 +23,9 @@ import java.util.List;
  */
 public class ViewPagerAdapter extends PagerAdapter {
     Context ssContext;
-    private List<String> images = new ArrayList<>();
+    private List<Image> images = new ArrayList<>();
 
-    public ViewPagerAdapter(Context ssContext, List<String> images) {
+    public ViewPagerAdapter(Context ssContext, List<Image> images) {
         this.ssContext = ssContext;
         this.images = images;
     }
@@ -43,7 +45,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         ImageView ssImageView = new ImageView(ssContext);
         ssImageView.setPadding(0, 0, 0, 0);
         ssImageView.setAdjustViewBounds(true);
-        Uri uri = Uri.parse(images.get(ssPosition));
+        Uri uri = Uri.parse(ApiClient.BASE_URL + images.get(ssPosition).getImage());
         ssContext = ssImageView.getContext();
         Picasso.with(ssContext).load(uri).into(ssImageView);
 

@@ -16,7 +16,32 @@ public class Product {
     private String price;
     @SerializedName("discount")
     private String discount;
-
+    @SerializedName("size")
+    private String size;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("color")
+    private String color;
+    @SerializedName("owner_name")
+    private String ownerName;
+    @SerializedName("phone")
+    private String phone;
+    @SerializedName("phone2")
+    private String phone2;
+    @SerializedName("email")
+    private String email;
+    @SerializedName("website")
+    private String website;
+    @SerializedName("facebook")
+    private String facebook;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("cat_name")
+    private String catName;
+    @SerializedName("pro_id")
+    private String proId;
+    @SerializedName("created_at")
+    private String createdAt;
     public Product() {
     }
 
@@ -58,5 +83,109 @@ public class Product {
 
     public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCatName() {
+        return catName;
+    }
+
+    public void setCatName(String catName) {
+        this.catName = catName;
+    }
+
+    public String getProId() {
+        return proId;
+    }
+
+    public void setProId(String proId) {
+        this.proId = proId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

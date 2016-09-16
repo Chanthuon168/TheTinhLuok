@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 public class Image {
     @SerializedName("id")
     private int id;
+    @SerializedName("pro_id")
+    private int proId;
     @SerializedName("image")
     private String image;
 
@@ -28,5 +30,13 @@ public class Image {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getProId() {
+        return proId;
+    }
+
+    public void setProId(int proId) {
+        this.proId = proId;
     }
 }

@@ -65,7 +65,9 @@
             android:name=".RegisterActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ProductDetail">
+        <activity
+            android:name=".ProductDetail"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ContainerView" />
@@ -75,6 +77,10 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
 
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

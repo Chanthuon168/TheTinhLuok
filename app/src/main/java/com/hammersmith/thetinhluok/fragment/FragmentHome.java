@@ -1,5 +1,7 @@
 package com.hammersmith.thetinhluok.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ public class FragmentHome extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private SwipeRefreshLayout swipeRefresh;
     private int sizePromotion, sizeProduct;
+    private ProgressDialog mProgressDialog;
 
     public FragmentHome() {
 
@@ -66,6 +69,7 @@ public class FragmentHome extends Fragment {
         listData.add(viewBannerGallery.new BannerItem("http://www.gobeautyvoice.com/images/beauty_banner11.jpg", "http://www.gobeautyvoice.com", "Beauty Shop"));
         listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
         viewBannerGallery.flip(listData, true);
+        showProgressDialog();
 
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
@@ -114,6 +118,7 @@ public class FragmentHome extends Fragment {
                 recyclerView.setAdapter(adapter);
                 recyclerView.setHasFixedSize(true);
                 adapter.notifyDataSetChanged();
+                hideProgressDialog();
             }
 
             @Override
@@ -214,5 +219,36 @@ public class FragmentHome extends Fragment {
 
             }
         });
+    }
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

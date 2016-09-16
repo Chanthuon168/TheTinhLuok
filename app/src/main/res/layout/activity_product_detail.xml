@@ -5,15 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.hammersmith.thetinhluok.ProductDetail">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="60dp">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -38,10 +52,10 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/name_top"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:text="Robe"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -52,16 +66,16 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/price_top"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$20.00"
                             android:textColor="@color/white" />
 
                         <TextView
+                            android:id="@+id/discount_top"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="(30% OFF)"
                             android:textColor="@color/white" />
 
                         <LinearLayout
@@ -192,10 +206,10 @@
                                     android:text="Name" />
 
                                 <TextView
+                                    android:id="@+id/name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="Robe"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
@@ -211,17 +225,17 @@
                                     android:text="Price" />
 
                                 <TextView
+                                    android:id="@+id/price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="$20.00"
                                     android:textColor="@color/primary_text" />
 
                                 <TextView
+                                    android:id="@+id/discount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
-                                    android:text="(30% OFF)"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
@@ -237,10 +251,10 @@
                                     android:text="Saving" />
 
                                 <TextView
+                                    android:id="@+id/saving"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="$6.00"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
@@ -256,14 +270,36 @@
                                     android:text="Pay Only" />
 
                                 <TextView
+                                    android:id="@+id/pay"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="$14.00"
                                     android:textColor="@color/red" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/l_sizeType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="10dp">
+
+                                <TextView
+                                    android:id="@+id/txtSizeType"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Size/Type" />
+
+                                <TextView
+                                    android:id="@+id/sizeType"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/primary_text" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/l_color"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -272,13 +308,34 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Size/Type" />
+                                    android:text="Color" />
+
+                                <TextView
+                                    android:id="@+id/color"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/primary_text" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/l_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:text="Description" />
+
+                                <TextView
+                                    android:id="@+id/description"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="10dp"
-                                    android:text="M / Original"
+                                    android:text=""
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
@@ -359,10 +416,10 @@
                                     android:text="Name" />
 
                                 <TextView
+                                    android:id="@+id/ownerName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="The TinhLuok"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
@@ -378,14 +435,15 @@
                                     android:text="Phone" />
 
                                 <TextView
+                                    android:id="@+id/phone"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="0962008259/0969835343"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/l_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -397,14 +455,15 @@
                                     android:text="Email" />
 
                                 <TextView
+                                    android:id="@+id/email"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="chanthuonsreng@gmail.com"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/l_website"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -416,14 +475,15 @@
                                     android:text="Website" />
 
                                 <TextView
+                                    android:id="@+id/website"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="www.thetinhluok.com"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/l_facebook"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -435,10 +495,10 @@
                                     android:text="Facebook" />
 
                                 <TextView
+                                    android:id="@+id/facebook"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="The TinhLuok"
                                     android:textColor="@color/primary_text" />
                             </LinearLayout>
 
