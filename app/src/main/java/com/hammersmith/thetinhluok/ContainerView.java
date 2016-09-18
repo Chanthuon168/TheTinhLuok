@@ -38,7 +38,7 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
     private TextView name, email;
     private RoundedImageView profile;
     private User user;
-    private Context context;
+    private Context context = ContainerView.this;
     private View mHeaderView;
     private Boolean helper_home = false;
     private Boolean helper_product = false;
