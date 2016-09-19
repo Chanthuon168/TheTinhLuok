@@ -21,17 +21,22 @@
             android:weightSum="3">
 
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/man_clothes" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="centerCrop"/>
 
             <LinearLayout
+                android:id="@+id/l_favorite"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -41,9 +46,9 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Long Sleeve Blouse"
                         android:textColor="@color/primary_text" />
 
                     <LinearLayout
@@ -53,10 +58,11 @@
                         android:orientation="vertical">
 
                         <com.joanzapata.iconify.widget.IconTextView
-                            android:textColor="@color/divide_dark"
+                            android:id="@+id/iconDelete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="{fa-times-circle-o}"
+                            android:textColor="@color/divide_dark"
                             android:textSize="25sp" />
                     </LinearLayout>
 
@@ -69,23 +75,23 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$12.00"
                         android:textColor="@color/primary_text" />
 
                     <TextView
+                        android:id="@+id/discount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="(20 OFF)" />
+                        android:layout_marginLeft="5dp"/>
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/price_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="$9.60"
                     android:textColor="@color/red" />
 
                 <LinearLayout
@@ -94,10 +100,10 @@
                     android:gravity="bottom">
 
                     <TextView
-                        android:textColor="@color/divide_dark"
+                        android:id="@+id/createdAt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="18/09/2016 10:13 PM"/>
+                        android:textColor="@color/divide_dark" />
                 </LinearLayout>
 
             </LinearLayout>

@@ -85,6 +85,7 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
+                                android:id="@+id/l_love"
                                 android:layout_width="100dp"
                                 android:layout_height="30dp"
                                 android:layout_marginRight="5dp"
@@ -95,11 +96,13 @@
                                 android:padding="2dp">
 
                                 <ImageView
+                                    android:id="@+id/iconLove"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/heart_outline_white" />
 
                                 <TextView
+                                    android:id="@+id/txtLove"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="2dp"
@@ -107,10 +110,10 @@
                                     android:textColor="@color/white" />
 
                                 <TextView
+                                    android:id="@+id/txtNumLove"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="2dp"
-                                    android:text="10"
                                     android:textColor="@color/white" />
                             </LinearLayout>
 
@@ -124,6 +127,7 @@
                                 android:gravity="center">
 
                                 <ImageView
+                                    android:id="@+id/iconComment"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/comment_primary" />
@@ -131,7 +135,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="10"
+                                    android:id="@+id/txtNumComment"
                                     android:textColor="@color/colorPrimary" />
                             </LinearLayout>
                         </LinearLayout>
@@ -569,6 +573,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txtAddToFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

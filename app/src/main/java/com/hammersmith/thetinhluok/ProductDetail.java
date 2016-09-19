@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -29,12 +30,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.hammersmith.thetinhluok.adapter.CommentAdapter;
 import com.hammersmith.thetinhluok.adapter.ImageAdapter;
 import com.hammersmith.thetinhluok.model.Comment;
+import com.hammersmith.thetinhluok.model.Favorite;
 import com.hammersmith.thetinhluok.model.Image;
+import com.hammersmith.thetinhluok.model.Love;
 import com.hammersmith.thetinhluok.model.Product;
+import com.hammersmith.thetinhluok.model.User;
 import com.joanzapata.iconify.widget.IconTextView;
 
 import java.util.ArrayList;
@@ -45,6 +50,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
+    private User user;
+    private Favorite favorite;
     private Image image;
     private Product product;
     private List<Image> images = new ArrayList<>();
@@ -57,15 +64,20 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private Comment comment;
     private int proId;
     private LinearLayout l_sizeType, l_color, l_email, l_website, l_facebook, l_description;
-    private TextView nameTop, priceTop, discountTop, name, price, discount, saving, pay, sizeType, color, ownerName, phone, email, website, facebook, description, txtSizeType;
+    private TextView txtAddToFavorite, nameTop, priceTop, discountTop, name, price, discount, saving, pay, sizeType, color, ownerName, phone, email, website, facebook, description, txtSizeType;
     private ProgressDialog mProgressDialog;
     private Toolbar toolbar;
     private String strPhone, strEmail, strNumber, strTitle, strOwner, strDate;
+    private Love love;
+    private String numLove;
+    private ImageView iconLove, iconComment;
+    private TextView txtLove, txtNumLove, txtNumComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+        user = PrefUtils.getCurrentUser(ProductDetail.this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +93,12 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.l_report).setOnClickListener(this);
         findViewById(R.id.l_contact).setOnClickListener(this);
         findViewById(R.id.l_add_to_favorite).setOnClickListener(this);
+        findViewById(R.id.l_love).setOnClickListener(this);
+        iconLove = (ImageView) findViewById(R.id.iconLove);
+        iconComment = (ImageView) findViewById(R.id.iconComment);
+        txtLove = (TextView) findViewById(R.id.txtLove);
+        txtNumLove = (TextView) findViewById(R.id.txtNumLove);
+        txtNumComment = (TextView) findViewById(R.id.txtNumComment);
         l_sizeType = (LinearLayout) findViewById(R.id.l_sizeType);
         l_color = (LinearLayout) findViewById(R.id.l_color);
         l_email = (LinearLayout) findViewById(R.id.l_email);
@@ -104,12 +122,69 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         facebook = (TextView) findViewById(R.id.facebook);
         description = (TextView) findViewById(R.id.description);
         txtSizeType = (TextView) findViewById(R.id.txtSizeType);
+        txtAddToFavorite = (TextView) findViewById(R.id.txtAddToFavorite);
         findViewById(R.id.l_comment).setOnClickListener(this);
         proId = getIntent().getIntExtra("pro_id", 0);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         showProgressDialog();
+
+        ApiInterface serviceCountLove = ApiClient.getClient().create(ApiInterface.class);
+        Call<Love> callCount = serviceCountLove.getCountLove(proId);
+        callCount.enqueue(new Callback<Love>() {
+            @Override
+            public void onResponse(Call<Love> call, Response<Love> response) {
+                love = response.body();
+                numLove = love.getCount();
+                if (numLove.equals("no_love")) {
+                    numLove = "";
+                }
+                txtNumLove.setText(numLove);
+            }
+
+            @Override
+            public void onFailure(Call<Love> call, Throwable t) {
+
+            }
+        });
+
+        ApiInterface serviceLoveStatus = ApiClient.getClient().create(ApiInterface.class);
+        Call<Love> callStatus = serviceLoveStatus.getLoveStatus(proId, user.getSocialLink());
+        callStatus.enqueue(new Callback<Love>() {
+            @Override
+            public void onResponse(Call<Love> call, Response<Love> response) {
+                love = response.body();
+                if (love.getStatus().equals("checked")) {
+                    iconLove.setImageResource(R.drawable.heart_white);
+                    txtLove.setText("Liked");
+                } else {
+                    iconLove.setImageResource(R.drawable.heart_outline_white);
+                    txtLove.setText("Like");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Love> call, Throwable t) {
+
+            }
+        });
+
+        ApiInterface serviceFavoriteStatus = ApiClient.getClient().create(ApiInterface.class);
+        Call<Favorite> callStatusFavorite = serviceFavoriteStatus.getFavoriteStatus(proId, user.getSocialLink());
+        callStatusFavorite.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                favorite = response.body();
+                txtAddToFavorite.setText(favorite.getMsg());
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+
+            }
+        });
+
         ApiInterface serviceImage = ApiClient.getClient().create(ApiInterface.class);
         Call<List<Image>> callImage = serviceImage.getImage(proId);
         callImage.enqueue(new Callback<List<Image>>() {
@@ -216,14 +291,42 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
             case R.id.l_report:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", strEmail, null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Report The Product");
-                emailIntent.putExtra(Intent.EXTRA_TEXT,  "Dear Team The TinhLuok\n\n\tI want to report the product\n\n\tNumber "+strNumber+"\n\n\tTitle "+strTitle+"\n\n\tAdded by "+strOwner+"\n\n\tAdded date "+strDate+"\n\nThe reason ");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear Team The TinhLuok\n\n\tI want to report the product\n\n\tNumber " + strNumber + "\n\n\tTitle " + strTitle + "\n\n\tAdded by " + strOwner + "\n\n\tAdded date " + strDate + "\n\nThe reason ");
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
                 break;
             case R.id.l_contact:
                 dialogContact();
                 break;
             case R.id.l_add_to_favorite:
+                createFavorite();
+                break;
+            case R.id.l_love:
+                love = new Love(proId, user.getSocialLink());
+                ApiInterface serviceCreateLove = ApiClient.getClient().create(ApiInterface.class);
+                Call<Love> callCreate = serviceCreateLove.createLove(love);
+                callCreate.enqueue(new Callback<Love>() {
+                    @Override
+                    public void onResponse(Call<Love> call, Response<Love> response) {
+                        love = response.body();
+                        if (love.getStatus().equals("checked")) {
+                            iconLove.setImageResource(R.drawable.heart_white);
+                            txtLove.setText("Liked");
+                        } else {
+                            iconLove.setImageResource(R.drawable.heart_outline_white);
+                            txtLove.setText("Like");
+                        }
+                        if (love.getCount().equals("0")) {
+                            txtNumLove.setText("");
+                        } else {
+                            txtNumLove.setText(love.getCount());
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Love> call, Throwable t) {
+
+                    }
+                });
                 break;
             case R.id.l_comment:
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -244,6 +347,24 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 popWindow.showAtLocation(view, Gravity.BOTTOM, 0, 100);
                 break;
         }
+    }
+
+    private void createFavorite() {
+        favorite = new Favorite(proId, user.getSocialLink());
+        ApiInterface serviceCreateFavorite = ApiClient.getClient().create(ApiInterface.class);
+        Call<Favorite> callFavorite = serviceCreateFavorite.createFavorite(favorite);
+        callFavorite.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                favorite = response.body();
+                txtAddToFavorite.setText(favorite.getMsg());
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+
+            }
+        });
     }
 
     private void dialogContact() {

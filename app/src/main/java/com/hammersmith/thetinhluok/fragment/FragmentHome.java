@@ -152,9 +152,9 @@ public class FragmentHome extends Fragment {
         TextView message = (TextView) viewDialog.findViewById(R.id.message);
         message.setText(strMessage);
         IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
-        icon.setText("{fa-times-circle}");
+        icon.setText("{fa-times-circle-o}");
         TextView activate = (TextView) viewDialog.findViewById(R.id.ok);
-        activate.setText("Ok");
+        activate.setText("Exit");
         activate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +220,7 @@ public class FragmentHome extends Fragment {
             }
         });
     }
+
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(getActivity());

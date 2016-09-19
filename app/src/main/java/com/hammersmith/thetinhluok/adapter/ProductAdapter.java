@@ -19,19 +19,28 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.hammersmith.thetinhluok.ApiClient;
+import com.hammersmith.thetinhluok.ApiInterface;
+import com.hammersmith.thetinhluok.PrefUtils;
 import com.hammersmith.thetinhluok.ProductDetail;
 import com.hammersmith.thetinhluok.R;
 import com.hammersmith.thetinhluok.model.Comment;
+import com.hammersmith.thetinhluok.model.Love;
 import com.hammersmith.thetinhluok.model.Product;
+import com.hammersmith.thetinhluok.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by Chan Thuon on 9/9/2016.
  */
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAdapter> {
+    private User user;
     private Context context;
     private Activity activity;
     private List<Product> products;
@@ -40,10 +49,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
     private CommentAdapter commentAdapter;
     private List<Comment> comments = new ArrayList<>();
     private Comment comment;
-    public ProductAdapter(Activity activity, List<Product> products){
+    private String numLove;
+    private Love love;
+
+    public ProductAdapter(Activity activity, List<Product> products) {
         this.activity = activity;
         this.products = products;
+        user = PrefUtils.getCurrentUser(activity);
     }
+
     @Override
     public MyViewAdapter onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_product, parent, false);
@@ -56,8 +70,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
         Uri uri = Uri.parse(ApiClient.BASE_URL + products.get(position).getImage());
         context = holder.image.getContext();
         Picasso.with(context).load(uri).into(holder.image);
-        holder.price.setText("$"+products.get(position).getPrice());
-        holder.discount.setText("("+products.get(position).getDiscount()+"% OFF)");
+        holder.price.setText("$" + products.get(position).getPrice());
+        holder.discount.setText("(" + products.get(position).getDiscount() + "% OFF)");
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,10 +102,72 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
                 popWindow.showAtLocation(view, Gravity.BOTTOM, 0, 100);
             }
         });
+
+        ApiInterface serviceCountLove = ApiClient.getClient().create(ApiInterface.class);
+        Call<Love> callCount = serviceCountLove.getCountLove(products.get(position).getId());
+        callCount.enqueue(new Callback<Love>() {
+            @Override
+            public void onResponse(Call<Love> call, Response<Love> response) {
+                love = response.body();
+                numLove = love.getCount();
+                if (numLove.equals("no_love")) {
+                    numLove = "";
+                }
+                holder.txtNumLove.setText(numLove);
+            }
+
+            @Override
+            public void onFailure(Call<Love> call, Throwable t) {
+
+            }
+        });
+
+        ApiInterface serviceLoveStatus = ApiClient.getClient().create(ApiInterface.class);
+        Call<Love> callStatus = serviceLoveStatus.getLoveStatus(products.get(position).getId(), user.getSocialLink());
+        callStatus.enqueue(new Callback<Love>() {
+            @Override
+            public void onResponse(Call<Love> call, Response<Love> response) {
+                love = response.body();
+                if (love.getStatus().equals("checked")) {
+                    holder.iconLove.setImageResource(R.drawable.heart);
+                } else {
+                    holder.iconLove.setImageResource(R.drawable.heart_outline);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Love> call, Throwable t) {
+
+            }
+        });
+
         holder.iconLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.iconLove.setImageResource(R.drawable.heart);
+                love = new Love(products.get(position).getId(), user.getSocialLink());
+                ApiInterface serviceCreateLove = ApiClient.getClient().create(ApiInterface.class);
+                Call<Love> callCreate = serviceCreateLove.createLove(love);
+                callCreate.enqueue(new Callback<Love>() {
+                    @Override
+                    public void onResponse(Call<Love> call, Response<Love> response) {
+                        love = response.body();
+                        if (love.getStatus().equals("checked")) {
+                            holder.iconLove.setImageResource(R.drawable.heart);
+                        } else {
+                            holder.iconLove.setImageResource(R.drawable.heart_outline);
+                        }
+                        if (love.getCount().equals("0")) {
+                            holder.txtNumLove.setText("");
+                        } else {
+                            holder.txtNumLove.setText(love.getCount());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Love> call, Throwable t) {
+
+                    }
+                });
             }
         });
     }
@@ -116,7 +192,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
 
     public class MyViewAdapter extends RecyclerView.ViewHolder {
         ImageView image, iconLove, iconComment;
-        TextView price, discount;
+        TextView price, discount, txtNumLove, txtNumComment;
+
         public MyViewAdapter(View itemView) {
             super(itemView);
             image = (ImageView) itemView.findViewById(R.id.image);
@@ -124,6 +201,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
             discount = (TextView) itemView.findViewById(R.id.discount);
             iconLove = (ImageView) itemView.findViewById(R.id.love);
             iconComment = (ImageView) itemView.findViewById(R.id.comment);
+            txtNumLove = (TextView) itemView.findViewById(R.id.txtNumLove);
+            txtNumComment = (TextView) itemView.findViewById(R.id.txtNumComment);
         }
     }
 }

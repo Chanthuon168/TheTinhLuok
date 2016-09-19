@@ -12,6 +12,10 @@ public class MyProduct {
     private String title;
     @SerializedName("image")
     private String image;
+    @SerializedName("pro_id")
+    private int proId;
+    @SerializedName("price")
+    private String price;
 
     public MyProduct() {
     }
@@ -38,5 +42,21 @@ public class MyProduct {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getProId() {
+        return proId;
+    }
+
+    public void setProId(int proId) {
+        this.proId = proId;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }
