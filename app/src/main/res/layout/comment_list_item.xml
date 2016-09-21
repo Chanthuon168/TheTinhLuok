@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <com.hammersmith.thetinhluok.RoundedImageView
-            android:id="@+id/category_image"
+            android:id="@+id/profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
@@ -32,6 +32,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -40,6 +41,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="write something"
@@ -52,6 +54,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/createdAt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yesterday at 12:00 PM"
@@ -67,12 +70,14 @@
                     android:textSize="3sp" />
 
                 <TextView
+                    android:id="@+id/txtReply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reply" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lReply"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -91,6 +96,7 @@
                     android:orientation="horizontal">
 
                     <com.hammersmith.thetinhluok.RoundedImageView
+                        android:id="@+id/profileReply"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
@@ -107,6 +113,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/nameReply"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -115,6 +122,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/reply"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="write something"

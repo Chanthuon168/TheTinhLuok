@@ -22,8 +22,25 @@ public class Comment {
     private String nameReply;
     @SerializedName("reply")
     private String reply;
+    @SerializedName("count")
+    private String count;
+    @SerializedName("last_message")
+    private String lastMessage;
+    @SerializedName("social_link")
+    private String socialLink;
+    @SerializedName("pro_id")
+    private int proId;
+    @SerializedName("new_comment")
+    private String newComment;
 
     public Comment() {
+    }
+
+    public Comment(int proId, String socialLink, String comment, String createAt) {
+        this.proId = proId;
+        this.socialLink = socialLink;
+        this.comment = comment;
+        this.createAt = createAt;
     }
 
     public int getId() {
@@ -88,5 +105,37 @@ public class Comment {
 
     public void setReply(String reply) {
         this.reply = reply;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public String getSocialLink() {
+        return socialLink;
+    }
+
+    public void setSocialLink(String socialLink) {
+        this.socialLink = socialLink;
+    }
+
+    public int getProId() {
+        return proId;
+    }
+
+    public void setProId(int proId) {
+        this.proId = proId;
     }
 }

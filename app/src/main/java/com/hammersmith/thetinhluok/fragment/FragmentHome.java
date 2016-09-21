@@ -29,7 +29,9 @@ import com.hammersmith.thetinhluok.model.Product;
 import com.hammersmith.thetinhluok.model.Promotion;
 import com.joanzapata.iconify.widget.IconTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;

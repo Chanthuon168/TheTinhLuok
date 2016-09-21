@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -42,7 +45,9 @@ import com.hammersmith.thetinhluok.model.Product;
 import com.hammersmith.thetinhluok.model.User;
 import com.joanzapata.iconify.widget.IconTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -62,6 +67,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private CommentAdapter commentAdapter;
     private List<Comment> comments = new ArrayList<>();
     private Comment comment;
+    private Comment comm;
     private int proId;
     private LinearLayout l_sizeType, l_color, l_email, l_website, l_facebook, l_description;
     private TextView txtAddToFavorite, nameTop, priceTop, discountTop, name, price, discount, saving, pay, sizeType, color, ownerName, phone, email, website, facebook, description, txtSizeType;
@@ -69,7 +75,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private Toolbar toolbar;
     private String strPhone, strEmail, strNumber, strTitle, strOwner, strDate;
     private Love love;
-    private String numLove;
+    private String numLove, numComment;
     private ImageView iconLove, iconComment;
     private TextView txtLove, txtNumLove, txtNumComment;
 
@@ -145,6 +151,25 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<Love> call, Throwable t) {
+
+            }
+        });
+
+        ApiInterface serviceCountComment = ApiClient.getClient().create(ApiInterface.class);
+        Call<Comment> callCountComment = serviceCountComment.getCountComment(proId);
+        callCountComment.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                comment = response.body();
+                numComment = comment.getCount();
+                if (numComment.equals("no_comment")) {
+                    numComment = "";
+                }
+                txtNumComment.setText(numComment);
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
 
             }
         });
@@ -331,20 +356,186 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
             case R.id.l_comment:
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View inflatedView = layoutInflater.inflate(R.layout.popup_layout, null, false);
-                RecyclerView recyclerViewComment = (RecyclerView) inflatedView.findViewById(R.id.commentsListView);
+                final RecyclerView recyclerViewComment = (RecyclerView) inflatedView.findViewById(R.id.commentsListView);
+                final EditText writeComment = (EditText) inflatedView.findViewById(R.id.writeComment);
+                final ImageView iconSend = (ImageView) inflatedView.findViewById(R.id.iconSend);
+                final LinearLayout lNoComment = (LinearLayout) inflatedView.findViewById(R.id.lNoComment);
+                final LinearLayout lDialog = (LinearLayout) inflatedView.findViewById(R.id.lDialog);
                 Display display = getWindowManager().getDefaultDisplay();
                 final Point size = new Point();
                 display.getSize(size);
                 DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
                 int width = displayMetrics.widthPixels;
                 int height = displayMetrics.heightPixels;
-                setSimpleList(recyclerViewComment);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(ProductDetail.this);
+                recyclerViewComment.setLayoutManager(layoutManager);
+
+                ApiInterface serviceComment = ApiClient.getClient().create(ApiInterface.class);
+                final Call<List<Comment>> callComment = serviceComment.getComment(proId);
+                callComment.enqueue(new Callback<List<Comment>>() {
+                    @Override
+                    public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                        comments = response.body();
+                        lDialog.setVisibility(View.GONE);
+                        if (comments.size() < 1) {
+                            lNoComment.setVisibility(View.VISIBLE);
+                        } else {
+                            lNoComment.setVisibility(View.GONE);
+                            commentAdapter = new CommentAdapter(ProductDetail.this, comments);
+                            recyclerViewComment.setAdapter(commentAdapter);
+                            commentAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Comment>> call, Throwable t) {
+
+                    }
+                });
                 popWindow = new PopupWindow(inflatedView, width, height - 50, true);
                 popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_bg));
                 popWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
                 popWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
                 popWindow.setAnimationStyle(R.style.PopupAnimation);
                 popWindow.showAtLocation(view, Gravity.BOTTOM, 0, 100);
+                iconSend.setEnabled(false);
+                writeComment.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (charSequence.toString().trim().length() == 0) {
+                            iconSend.setEnabled(false);
+                            iconSend.setImageResource(R.drawable.ic_content_unsend);
+                        } else {
+                            iconSend.setEnabled(true);
+                            iconSend.setImageResource(R.drawable.ic_content_send);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+                iconSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (comments.size() < 1) {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String currentDateTime = dateFormat.format(new Date());
+                            comment = new Comment(proId, user.getSocialLink(), writeComment.getText().toString(), currentDateTime);
+                            ApiInterface serviceCreateComment = ApiClient.getClient().create(ApiInterface.class);
+                            Call<Comment> callCreate = serviceCreateComment.createComment(comment);
+                            callCreate.enqueue(new Callback<Comment>() {
+                                @Override
+                                public void onResponse(Call<Comment> call, Response<Comment> response) {
+                                    ApiInterface serviceComment = ApiClient.getClient().create(ApiInterface.class);
+                                    final Call<List<Comment>> callComment = serviceComment.getComment(proId);
+                                    callComment.enqueue(new Callback<List<Comment>>() {
+                                        @Override
+                                        public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                                            comments = response.body();
+                                            lDialog.setVisibility(View.GONE);
+                                            if (comments.size() < 1) {
+                                                lNoComment.setVisibility(View.VISIBLE);
+                                            } else {
+                                                lNoComment.setVisibility(View.GONE);
+                                                commentAdapter = new CommentAdapter(ProductDetail.this, comments);
+                                                recyclerViewComment.setAdapter(commentAdapter);
+                                                commentAdapter.notifyDataSetChanged();
+                                            }
+                                            lNoComment.setVisibility(View.GONE);
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<List<Comment>> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                    ApiInterface serviceCountComment = ApiClient.getClient().create(ApiInterface.class);
+                                    Call<Comment> callCountComment = serviceCountComment.getCountComment(proId);
+                                    callCountComment.enqueue(new Callback<Comment>() {
+                                        @Override
+                                        public void onResponse(Call<Comment> call, Response<Comment> response) {
+                                            comment = response.body();
+                                            numComment = comment.getCount();
+                                            if (numComment.equals("no_comment")) {
+                                                numComment = "";
+                                            }
+                                            txtNumComment.setText(numComment);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Comment> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<Comment> call, Throwable t) {
+
+                                }
+                            });
+                        } else {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String currentDateTime = dateFormat.format(new Date());
+                            comment = new Comment(proId, user.getSocialLink(), writeComment.getText().toString(), currentDateTime);
+                            ApiInterface serviceCreateComment = ApiClient.getClient().create(ApiInterface.class);
+                            Call<Comment> callCreate = serviceCreateComment.createComment(comment);
+                            callCreate.enqueue(new Callback<Comment>() {
+                                @Override
+                                public void onResponse(Call<Comment> call, Response<Comment> response) {
+                                    lNoComment.setVisibility(View.GONE);
+                                    comment = response.body();
+                                    comm = new Comment();
+                                    comm.setComment(comment.getComment());
+                                    comm.setProfile(comment.getProfile());
+                                    comm.setCreateAt(comment.getCreateAt());
+                                    comm.setName(comment.getName());
+                                    comm.setLastMessage(comment.getLastMessage());
+                                    comments.add(comm);
+                                    commentAdapter.notifyDataSetChanged();
+                                    if (commentAdapter.getItemCount() > 1) {
+                                        recyclerViewComment.getLayoutManager().smoothScrollToPosition(recyclerViewComment, null, commentAdapter.getItemCount() - 1);
+                                    }
+
+                                    ApiInterface serviceCountComment = ApiClient.getClient().create(ApiInterface.class);
+                                    Call<Comment> callCountComment = serviceCountComment.getCountComment(proId);
+                                    callCountComment.enqueue(new Callback<Comment>() {
+                                        @Override
+                                        public void onResponse(Call<Comment> call, Response<Comment> response) {
+                                            comment = response.body();
+                                            numComment = comment.getCount();
+                                            if (numComment.equals("no_comment")) {
+                                                numComment = "";
+                                            }
+                                            txtNumComment.setText(numComment);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Comment> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<Comment> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                        writeComment.setText("");
+                    }
+                });
                 break;
         }
     }
@@ -408,19 +599,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
             });
         }
         dialog.show();
-    }
-
-    public void setSimpleList(RecyclerView recyclerView) {
-        commentAdapter = new CommentAdapter(this, comments);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(commentAdapter);
-        recyclerView.setHasFixedSize(true);
-        for (int i = 0; i < 10; i++) {
-            comment = new Comment();
-            comment.setId(1);
-        }
-        commentAdapter.notifyDataSetChanged();
     }
 
     @Override
