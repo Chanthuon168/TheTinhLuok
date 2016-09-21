@@ -1,14 +1,21 @@
 package com.hammersmith.thetinhluok.fragment;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,14 +25,19 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.darsh.multipleimageselect.activities.AlbumSelectActivity;
+import com.darsh.multipleimageselect.helpers.Constants;
+import com.darsh.multipleimageselect.models.Image;
 import com.hammersmith.thetinhluok.ApiClient;
 import com.hammersmith.thetinhluok.ApiInterface;
 import com.hammersmith.thetinhluok.Constant;
 import com.hammersmith.thetinhluok.MyApplication;
 import com.hammersmith.thetinhluok.R;
 import com.hammersmith.thetinhluok.adapter.CategoryAdapter;
+import com.hammersmith.thetinhluok.adapter.GridviewImage;
 import com.hammersmith.thetinhluok.adapter.PhotoAdapter;
 import com.hammersmith.thetinhluok.model.Category;
+import com.hammersmith.thetinhluok.model.Love;
 import com.hammersmith.thetinhluok.model.Photo;
 
 import org.json.JSONArray;
@@ -50,6 +62,11 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     private PhotoAdapter photoAdapter;
     private static String strProcess = "category";
     private TextView txtProcess;
+    private ImageView imageView;
+    private LinearLayout linearLayout1;
+    private List<String> imgpath = new ArrayList<>();
+    private GridView gridView;
+    private GridviewImage gridAdapter;
 
     int socketTimeout = 60000;
     RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -62,6 +79,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_sell, container, false);
+        imageView = (ImageView) root.findViewById(R.id.image);
         root.findViewById(R.id.l_back).setOnClickListener(this);
         root.findViewById(R.id.l_next).setOnClickListener(this);
         root.findViewById(R.id.lImportPhoto).setOnClickListener(this);
@@ -70,7 +88,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         lPhoto = (LinearLayout) root.findViewById(R.id.l_photo);
         lInformation = (LinearLayout) root.findViewById(R.id.l_information);
         recyclerViewCategory = (RecyclerView) root.findViewById(R.id.recyclerViewCategory);
-        recyclerViewPhoto = (RecyclerView) root.findViewById(R.id.recyclerViewPhoto);
+//        recyclerViewPhoto = (RecyclerView) root.findViewById(R.id.recyclerViewPhoto);
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManagerPhoto = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         categoryAdapter = new CategoryAdapter(getActivity(), categories);
@@ -78,17 +96,11 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         recyclerViewCategory.setAdapter(categoryAdapter);
         categoryAdapter.setClickListener(this);
 
-        photoAdapter = new PhotoAdapter(getActivity(), photos);
-        recyclerViewPhoto.setLayoutManager(layoutManagerPhoto);
-        recyclerViewPhoto.setAdapter(photoAdapter);
-        for (int a = 0; a < 4; a++) {
-            photo = new Photo();
-            photo.setImage("photo");
-            photos.add(photo);
-        }
-        photoAdapter.notifyDataSetChanged();
-
         filterCategory();
+
+        gridView = (GridView) root.findViewById(R.id.grid_view);
+        gridAdapter = new GridviewImage(getActivity(), imgpath);
+        gridView.setAdapter(gridAdapter);
 
         return root;
     }
@@ -168,8 +180,22 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 }
                 break;
             case R.id.lImportPhoto:
-                    Toast.makeText(getActivity(),"Import",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AlbumSelectActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 4);
+                startActivityForResult(intent, Constants.REQUEST_CODE);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE && resultCode == resultCode && data != null) {
+            ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
+            imgpath.clear();
+            for (int i = 0, l = images.size(); i < l; i++) {
+                imgpath.add(images.get(i).path);
+            }
+            gridAdapter.notifyDataSetChanged();
         }
     }
 }
