@@ -2,10 +2,13 @@ package com.hammersmith.thetinhluok.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hammersmith.thetinhluok.R;
@@ -23,19 +26,22 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
     private Context context;
     private Activity activity;
     private Photo photo;
-    private List<Photo> photos;
+    private List<String> photos;
 
-    public PhotoAdapter(Activity activity, List<Photo> photos) {
+    public PhotoAdapter(Activity activity, List<String> photos) {
         this.activity = activity;
         this.photos = photos;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         IconTextView icon;
-        TextView title;
+        TextView txtDefaultPhoto;
+        ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            imageView = (ImageView) itemView.findViewById(R.id.image);
+            txtDefaultPhoto = (TextView) itemView.findViewById(R.id.txtDefaultPhoto);
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
         }
@@ -56,8 +62,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        Bitmap bitmap = BitmapFactory.decodeFile(photos.get(position));
+        holder.imageView.setImageBitmap(bitmap);
+        if (position == 0){
+            holder.txtDefaultPhoto.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

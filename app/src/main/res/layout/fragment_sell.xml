@@ -25,12 +25,14 @@
             android:gravity="center">
 
             <com.joanzapata.iconify.widget.IconTextView
+                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="{fa-arrow-circle-left}"
                 android:textSize="20sp" />
 
             <TextView
+                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" Back" />
@@ -61,11 +63,15 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/next"
+                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Next " />
 
             <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/iconNext"
+                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="{fa-arrow-circle-right}"
@@ -108,27 +114,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <GridView
-                    android:id="@+id/grid_view"
+                <ImageView
+                    android:id="@+id/image"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewPhoto"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </GridView>
-
-                <!--<HorizontalScrollView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:scrollbars="none">-->
-
-                <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/recyclerViewPhoto"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--</android.support.v7.widget.RecyclerView>-->
-                <!--</HorizontalScrollView>-->
+                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
             <LinearLayout
@@ -195,7 +194,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:elevation="2dp"
+                    android:elevation="5dp"
                     app:cardCornerRadius="@dimen/card_album_radius"
                     card_view:cardCornerRadius="@dimen/card_album_radius">
 
@@ -209,7 +208,7 @@
                             android:layout_height="wrap_content"
                             android:padding="15dp"
                             android:text="Product's Information"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary_text"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -230,6 +229,7 @@
                                 android:layout_marginTop="5dp">
 
                                 <EditText
+                                    android:id="@+id/titleProduct"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Title of product" />
@@ -248,6 +248,8 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:id="@+id/price"
+                                        android:inputType="numberDecimal"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="Price ($)" />
@@ -260,6 +262,9 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:text="0"
+                                        android:id="@+id/discount"
+                                        android:inputType="numberDecimal"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="Discount (%)" />
@@ -279,6 +284,7 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:id="@+id/size"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="Size" />
@@ -291,6 +297,7 @@
                                     android:layout_weight="1">
 
                                     <EditText
+                                        android:id="@+id/color"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="Color" />
@@ -303,6 +310,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:id="@+id/description"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Description"
@@ -318,8 +326,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:layout_marginTop="10dp"
-                    android:elevation="2dp"
+                    android:layout_marginTop="20dp"
+                    android:elevation="5dp"
                     app:cardCornerRadius="@dimen/card_album_radius"
                     card_view:cardCornerRadius="@dimen/card_album_radius">
 
@@ -333,7 +341,7 @@
                             android:layout_height="wrap_content"
                             android:padding="15dp"
                             android:text="Seller's Information"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primary_text"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -354,6 +362,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:id="@+id/name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Name" />
@@ -365,6 +374,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:id="@+id/email"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Email" />
@@ -376,9 +386,11 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:inputType="number"
+                                    android:id="@+id/phone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Phone one" />
+                                    android:hint="Phone" />
                             </android.support.design.widget.TextInputLayout>
 
                             <android.support.design.widget.TextInputLayout
@@ -387,6 +399,8 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:inputType="number"
+                                    android:id="@+id/phone2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Phone two (optional)" />
@@ -398,6 +412,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:id="@+id/website"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Website (optional)" />
@@ -409,6 +424,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
+                                    android:id="@+id/facebook"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Facebook (optional)" />
@@ -422,6 +438,7 @@
                                 android:orientation="horizontal">
 
                                 <CheckBox
+                                    android:id="@+id/checkbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
 
@@ -433,6 +450,7 @@
                                     android:textColor="@color/primary_text" />
 
                                 <TextView
+                                    android:id="@+id/read"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
