@@ -69,7 +69,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private Comment comment;
     private Comment comm;
     private int proId;
-    private LinearLayout l_sizeType, l_color, l_email, l_website, l_facebook, l_description;
+    private LinearLayout l_sizeType, l_color, l_email, l_description;
     private TextView txtAddToFavorite, nameTop, priceTop, discountTop, name, price, discount, saving, pay, sizeType, color, ownerName, phone, email, website, facebook, description, txtSizeType;
     private ProgressDialog mProgressDialog;
     private Toolbar toolbar;
@@ -108,8 +108,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         l_sizeType = (LinearLayout) findViewById(R.id.l_sizeType);
         l_color = (LinearLayout) findViewById(R.id.l_color);
         l_email = (LinearLayout) findViewById(R.id.l_email);
-        l_website = (LinearLayout) findViewById(R.id.l_website);
-        l_facebook = (LinearLayout) findViewById(R.id.l_facebook);
         l_description = (LinearLayout) findViewById(R.id.l_description);
         nameTop = (TextView) findViewById(R.id.name_top);
         priceTop = (TextView) findViewById(R.id.price_top);
@@ -124,8 +122,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         ownerName = (TextView) findViewById(R.id.ownerName);
         phone = (TextView) findViewById(R.id.phone);
         email = (TextView) findViewById(R.id.email);
-        website = (TextView) findViewById(R.id.website);
-        facebook = (TextView) findViewById(R.id.facebook);
         description = (TextView) findViewById(R.id.description);
         txtSizeType = (TextView) findViewById(R.id.txtSizeType);
         txtAddToFavorite = (TextView) findViewById(R.id.txtAddToFavorite);
@@ -287,16 +283,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                     l_email.setVisibility(View.GONE);
                 } else {
                     email.setText(product.getEmail());
-                }
-                if (product.getWebsite().equals("")) {
-                    l_website.setVisibility(View.GONE);
-                } else {
-                    website.setText(product.getWebsite());
-                }
-                if (product.getFacebook().equals("")) {
-                    l_facebook.setVisibility(View.GONE);
-                } else {
-                    facebook.setText(product.getFacebook());
                 }
 
                 hideProgressDialog();

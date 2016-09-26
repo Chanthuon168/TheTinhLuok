@@ -133,9 +133,9 @@
                                     android:src="@drawable/comment_primary" />
 
                                 <TextView
+                                    android:id="@+id/txtNumComment"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/txtNumComment"
                                     android:textColor="@color/colorPrimary" />
                             </LinearLayout>
                         </LinearLayout>
@@ -460,46 +460,6 @@
 
                                 <TextView
                                     android:id="@+id/email"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:textColor="@color/primary_text" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/l_website"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:padding="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Website" />
-
-                                <TextView
-                                    android:id="@+id/website"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:textColor="@color/primary_text" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/l_facebook"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:padding="10dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Facebook" />
-
-                                <TextView
-                                    android:id="@+id/facebook"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"

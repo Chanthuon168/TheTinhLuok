@@ -25,17 +25,17 @@
             android:gravity="center">
 
             <com.joanzapata.iconify.widget.IconTextView
-                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="{fa-arrow-circle-left}"
+                android:textColor="@color/primary_text"
                 android:textSize="20sp" />
 
             <TextView
-                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Back" />
+                android:text=" Back"
+                android:textColor="@color/primary_text" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,17 +64,17 @@
 
             <TextView
                 android:id="@+id/next"
-                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next " />
+                android:text="Next "
+                android:textColor="@color/primary_text" />
 
             <com.joanzapata.iconify.widget.IconTextView
                 android:id="@+id/iconNext"
-                android:textColor="@color/primary_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="{fa-arrow-circle-right}"
+                android:textColor="@color/primary_text"
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
@@ -249,10 +249,10 @@
 
                                     <EditText
                                         android:id="@+id/price"
-                                        android:inputType="numberDecimal"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:hint="Price ($)" />
+                                        android:hint="Price ($)"
+                                        android:inputType="numberDecimal" />
                                 </android.support.design.widget.TextInputLayout>
 
                                 <android.support.design.widget.TextInputLayout
@@ -262,12 +262,12 @@
                                     android:layout_weight="1">
 
                                     <EditText
-                                        android:text="0"
                                         android:id="@+id/discount"
-                                        android:inputType="numberDecimal"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:hint="Discount (%)" />
+                                        android:hint="Discount (%)"
+                                        android:inputType="numberDecimal"
+                                        android:text="0" />
                                 </android.support.design.widget.TextInputLayout>
                             </LinearLayout>
 
@@ -386,11 +386,11 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
-                                    android:inputType="number"
                                     android:id="@+id/phone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Phone" />
+                                    android:hint="Phone"
+                                    android:inputType="number" />
                             </android.support.design.widget.TextInputLayout>
 
                             <android.support.design.widget.TextInputLayout
@@ -399,35 +399,11 @@
                                 android:layout_marginTop="15dp">
 
                                 <EditText
-                                    android:inputType="number"
                                     android:id="@+id/phone2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="Phone two (optional)" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp">
-
-                                <EditText
-                                    android:id="@+id/website"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Website (optional)" />
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp">
-
-                                <EditText
-                                    android:id="@+id/facebook"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Facebook (optional)" />
+                                    android:hint="Phone two (optional)"
+                                    android:inputType="number" />
                             </android.support.design.widget.TextInputLayout>
 
                             <LinearLayout

@@ -3,6 +3,7 @@ package com.hammersmith.thetinhluok.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,12 +15,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +50,7 @@ import com.darsh.multipleimageselect.models.Image;
 import com.hammersmith.thetinhluok.ApiClient;
 import com.hammersmith.thetinhluok.ApiInterface;
 import com.hammersmith.thetinhluok.Constant;
+import com.hammersmith.thetinhluok.ContainerView;
 import com.hammersmith.thetinhluok.MyApplication;
 import com.hammersmith.thetinhluok.MyCommand;
 import com.hammersmith.thetinhluok.PrefUtils;
@@ -86,12 +91,11 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     private CategoryAdapter categoryAdapter;
     private LinearLayoutManager layoutManager;
     private GridLayoutManager layoutManagerPhoto;
-    private LinearLayout lCategory, lPhoto, lInformation;
+    private LinearLayout lCategory, lPhoto, lInformation, l_next;
     private PhotoAdapter photoAdapter;
     private static String strProcess = "category";
     private TextView txtProcess;
     private List<String> imgpath = new ArrayList<>();
-    private String pathImage = "'['";
     private List<String> fileName = new ArrayList<>();
     private int catId;
     int socketTimeout = 60000;
@@ -103,11 +107,12 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private EditText titleProduct, price, discount, size, color, description, name, email, phone, phone2, website, facebook;
+    private EditText titleProduct, price, discount, size, color, description, name, email, phone, phone2;
     private CheckBox checkBox;
     private TextView read, next;
     private IconTextView iconNext;
     private User user;
+    private ProgressDialog mProgressDialog;
 
     public FragmentSell() {
     }
@@ -130,8 +135,6 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         email = (EditText) root.findViewById(R.id.email);
         phone = (EditText) root.findViewById(R.id.phone);
         phone2 = (EditText) root.findViewById(R.id.phone2);
-        website = (EditText) root.findViewById(R.id.website);
-        facebook = (EditText) root.findViewById(R.id.facebook);
         checkBox = (CheckBox) root.findViewById(R.id.checkbox);
         read = (TextView) root.findViewById(R.id.read);
         next = (TextView) root.findViewById(R.id.next);
@@ -142,6 +145,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         lInformation = (LinearLayout) root.findViewById(R.id.l_information);
         recyclerViewCategory = (RecyclerView) root.findViewById(R.id.recyclerViewCategory);
         recyclerViewPhoto = (RecyclerView) root.findViewById(R.id.recyclerViewPhoto);
+        l_next = (LinearLayout) root.findViewById(R.id.l_next);
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManagerPhoto = new GridLayoutManager(getActivity(), 2);
         categoryAdapter = new CategoryAdapter(getActivity(), categories);
@@ -156,6 +160,21 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         recyclerViewPhoto.setLayoutManager(layoutManagerPhoto);
         recyclerViewPhoto.setAdapter(photoAdapter);
 
+        root.setFocusableInTouchMode(true);
+        root.requestFocus();
+        root.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialogExit("Are you sure want to cancel your selling?");
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        l_next.setVisibility(View.GONE);
 
         return root;
     }
@@ -167,6 +186,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         strProcess = "photo";
         txtProcess.setText("2/3 Import your photo");
         catId = categories.get(position).getId();
+        l_next.setVisibility(View.VISIBLE);
     }
 
     private void filterCategory() {
@@ -204,7 +224,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         switch (view.getId()) {
             case R.id.l_back:
                 if (strProcess.equals("category")) {
-                    Toast.makeText(getActivity(), "close", Toast.LENGTH_SHORT).show();
+                    dialogExit("Are you sure want to cancel your selling?");
                 } else if (strProcess.equals("photo")) {
                     lInformation.setVisibility(View.GONE);
                     lPhoto.setVisibility(View.GONE);
@@ -213,6 +233,9 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     txtProcess.setText("1/3 Choose the category");
                     next.setText("Next ");
                     iconNext.setText("{fa-arrow-circle-right}");
+                    l_next.setVisibility(View.GONE);
+                    imgpath.clear();
+                    photoAdapter.notifyDataSetChanged();
                 } else if (strProcess.equals("info")) {
                     lCategory.setVisibility(View.GONE);
                     lPhoto.setVisibility(View.VISIBLE);
@@ -221,6 +244,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     txtProcess.setText("2/3 Import your photo");
                     next.setText("Next ");
                     iconNext.setText("{fa-arrow-circle-right}");
+                    l_next.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.l_next:
@@ -232,17 +256,22 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     txtProcess.setText("2/3 Import your photo");
                     next.setText("Next ");
                     iconNext.setText("{fa-arrow-circle-right}");
+                    l_next.setVisibility(View.VISIBLE);
                 } else if (strProcess.equals("photo")) {
-                    lCategory.setVisibility(View.GONE);
-                    lPhoto.setVisibility(View.GONE);
-                    lInformation.setVisibility(View.VISIBLE);
-                    strProcess = "info";
-                    txtProcess.setText("3/3 Enter the information");
-                    next.setText("Sell ");
-                    iconNext.setText("{fa-check-circle}");
-                    getUser();
+                    if (imgpath.size() < 1) {
+                        dialogImport("Import your photos before continue!");
+                    } else {
+                        lCategory.setVisibility(View.GONE);
+                        lPhoto.setVisibility(View.GONE);
+                        lInformation.setVisibility(View.VISIBLE);
+                        strProcess = "info";
+                        txtProcess.setText("3/3 Enter the information");
+                        next.setText("Sell ");
+                        iconNext.setText("{fa-check-circle}");
+                        l_next.setVisibility(View.VISIBLE);
+                        getUser();
+                    }
                 } else if (strProcess.equals("info")) {
-//                    uploadFile();
                     if (name.getText().toString().equals("")) {
                         Snackbar snack = Snackbar.make(view, "Seller name required", Snackbar.LENGTH_LONG);
                         View v = snack.getView();
@@ -274,7 +303,15 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                         tv.setTextColor(Color.RED);
                         snack.show();
                     } else {
-                        sellProduct();
+                        if (checkBox.isChecked()) {
+                            uploadFile();
+                        } else {
+                            Snackbar snack = Snackbar.make(view, "Please agree term and condition.", Snackbar.LENGTH_LONG);
+                            View v = snack.getView();
+                            TextView tv = (TextView) v.findViewById(android.support.design.R.id.snackbar_text);
+                            tv.setTextColor(Color.RED);
+                            snack.show();
+                        }
                     }
                 }
                 break;
@@ -291,25 +328,18 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         if (requestCode == Constants.REQUEST_CODE && resultCode == resultCode && data != null) {
             ArrayList<Image> images = data.getParcelableArrayListExtra(Constants.INTENT_EXTRA_IMAGES);
             imgpath.clear();
-            fileName.clear();
             imageList.clear();
-            String path;
-            String temPath = "";
             for (int i = 0; i < images.size(); i++) {
                 imgpath.add(images.get(i).path);
-                fileName.add(images.get(i).name);
                 imageList.add(images.get(i).path);
-                path = '"' + images.get(i).path + '"';
-                temPath = path + ',' + path;
             }
-            pathImage = '[' + temPath + ']';
             photoAdapter.notifyDataSetChanged();
-            Log.d("filename", "" + fileName);
             Log.d("image", "" + imageList);
         }
     }
 
     private void uploadFile() {
+        showProgressDialog();
         for (String imagePath : imageList) {
             try {
                 Bitmap bitmap = PhotoLoader.init().from(imagePath).requestSize(512, 512).getBitmap();
@@ -321,7 +351,15 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+                        Log.d("response", response);
+                        fileName.add(response);
+                        Log.d("fileName", "" + fileName);
+                        if (fileName.size() == imageList.size()) {
+                            saveProduct();
+                        }
+//                        if (response.equals("uploaded_success")){
+//                            sellProduct();
+//                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -355,21 +393,6 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         }
     }
 
-    private void sellProduct() {
-        String strTitle = titleProduct.getText().toString();
-        String strPrice = price.getText().toString();
-        String strDiscount = discount.getText().toString();
-        String strSize = size.getText().toString();
-        String strColor = color.getText().toString();
-        String strDescription = description.getText().toString();
-        String strName = name.getText().toString();
-        String strEmail = email.getText().toString();
-        String strPhone = phone.getText().toString();
-        String strPhone2 = phone2.getText().toString();
-        String strWebsite = website.getText().toString();
-        String strFacebook = facebook.getText().toString();
-    }
-
     private void getUser() {
         final StringRequest userReq = new StringRequest(Request.Method.POST, Constant.URL_USER, new Response.Listener<String>() {
             @Override
@@ -380,9 +403,6 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     email.setText(obj.getString("email"));
                     phone.setText(obj.getString("phone"));
                     phone2.setText(obj.getString("phone2"));
-                    website.setText(obj.getString("website"));
-                    facebook.setText(obj.getString("facebook"));
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -391,7 +411,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getActivity(), "history " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "" + volleyError.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
@@ -405,5 +425,188 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         userReq.setRetryPolicy(policy);
         MyApplication.getInstance().addToRequestQueue(userReq);
+    }
+
+    private void dialogExit(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-times-circle-o}");
+        TextView activate = (TextView) viewDialog.findViewById(R.id.ok);
+        activate.setText("Yes");
+        activate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                strProcess = "category";
+                startActivity(new Intent(getActivity(), ContainerView.class));
+                getActivity().finish();
+            }
+        });
+        TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
+        cancel.setText("No");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void dialogImport(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog_new, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-picture-o}");
+        TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
+        cancel.setText("Yes");
+        viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void dialogSuccess(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog_new, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-check-circle-o}");
+        TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
+        cancel.setText("Successfully");
+        viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ContainerView.class));
+                getActivity().finish();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void saveProduct() {
+        final String strTitle = titleProduct.getText().toString();
+        final String strPrice = price.getText().toString();
+        final String strDiscount = discount.getText().toString();
+        final String strSize = size.getText().toString();
+        final String strColor = color.getText().toString();
+        final String strDescription = description.getText().toString();
+        final String strName = name.getText().toString();
+        final String strEmail = email.getText().toString();
+        final String strPhone = phone.getText().toString();
+        final String strPhone2 = phone2.getText().toString();
+        StringRequest userReq = new StringRequest(Request.Method.POST, Constant.URL_SAVEPRODUCT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(final String proId) {
+                for (final String nameList : fileName) {
+                    StringRequest userReq = new StringRequest(Request.Method.POST, Constant.URL_SAVEIMAGE, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            imageList.clear();
+                            fileName.clear();
+                            strProcess = "category";
+                            hideProgressDialog();
+                            dialogSuccess("Your product uploaded successfully");
+                        }
+                    },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    Toast.makeText(getActivity(), " " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("pro_id", proId);
+                            params.put("image", nameList);
+                            return params;
+                        }
+                    };
+                    int socketTimeout = 60000;
+                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    userReq.setRetryPolicy(policy);
+                    MyApplication.getInstance().addToRequestQueue(userReq);
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(getActivity(), " " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("cat_id", String.valueOf(catId));
+                params.put("title", strTitle);
+                params.put("image", fileName.get(0));
+                params.put("price", strPrice);
+                params.put("discount", strDiscount);
+                params.put("size", strSize);
+                params.put("color", strColor);
+                params.put("description", strDescription);
+                params.put("name", strName);
+                params.put("email", strEmail);
+                params.put("phone", strPhone);
+                params.put("phone2", strPhone2);
+                params.put("social_link", user.getSocialLink());
+                return params;
+            }
+        };
+        int socketTimeout = 60000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        userReq.setRetryPolicy(policy);
+        MyApplication.getInstance().addToRequestQueue(userReq);
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Product uploading...");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }
