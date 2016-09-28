@@ -69,7 +69,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private Comment comment;
     private Comment comm;
     private int proId;
-    private LinearLayout l_sizeType, l_color, l_email, l_description;
+    private LinearLayout l_sizeType, l_color, l_email, l_description, lAddress;
     private TextView txtAddToFavorite, nameTop, priceTop, discountTop, name, price, discount, saving, pay, sizeType, color, ownerName, phone, email, website, facebook, description, txtSizeType;
     private ProgressDialog mProgressDialog;
     private Toolbar toolbar;
@@ -77,7 +77,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private Love love;
     private String numLove, numComment;
     private ImageView iconLove, iconComment;
-    private TextView txtLove, txtNumLove, txtNumComment;
+    private TextView txtLove, txtNumLove, txtNumComment, address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +125,8 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         description = (TextView) findViewById(R.id.description);
         txtSizeType = (TextView) findViewById(R.id.txtSizeType);
         txtAddToFavorite = (TextView) findViewById(R.id.txtAddToFavorite);
+        lAddress = (LinearLayout) findViewById(R.id.lAddress);
+        address = (TextView) findViewById(R.id.address);
         findViewById(R.id.l_comment).setOnClickListener(this);
         proId = getIntent().getIntExtra("pro_id", 0);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -283,6 +285,11 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                     l_email.setVisibility(View.GONE);
                 } else {
                     email.setText(product.getEmail());
+                }
+                if (product.getAddress().equals("")) {
+                    lAddress.setVisibility(View.GONE);
+                } else {
+                    address.setText(product.getAddress());
                 }
 
                 hideProgressDialog();

@@ -6,4 +6,5 @@
     <string name="app_id">616552675183122</string>
     <string name="google_key">AIzaSyD8WeGttdfW-7YlGr7VSwBxLdmhCE0YbIg</string>
     <string name="read_more"><u>Read more</u>.</string>
+    <string name="change_password"><u>Change Password</u></string>
 </resources>

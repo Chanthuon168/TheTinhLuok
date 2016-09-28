@@ -10,14 +10,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/noProduct"
-            android:visibility="gone"
+        <LinearLayout
+            android:id="@+id/noMyProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="There are no your product"
-            android:textSize="20sp" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="{fa-tags}"
+                android:textColor="@color/divide_dark"
+                android:textSize="55sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="There are no product"
+                android:textColor="@color/divide_dark"
+                android:textSize="18sp"
+                android:visibility="visible" />
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewMyProduct"

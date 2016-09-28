@@ -22,6 +22,12 @@ public class User {
     private String msg;
     @SerializedName("password")
     private String password;
+    @SerializedName("address")
+    private String address;
+    @SerializedName("phone")
+    private String phone;
+    @SerializedName("phone2")
+    private String phone2;
 
     public User() {
     }
@@ -100,5 +106,37 @@ public class User {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
     }
 }

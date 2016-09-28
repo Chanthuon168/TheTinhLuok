@@ -90,8 +90,8 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
         m.findItem(R.id.nav_my_product).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_tags));
         m.findItem(R.id.nav_favorite).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_star_half_o));
         m.findItem(R.id.nav_logout).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_sign_out));
-        m.findItem(R.id.nav_about).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info));
-        m.findItem(R.id.nav_language).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_language));
+//        m.findItem(R.id.nav_about).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info));
+//        m.findItem(R.id.nav_language).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_language));
 
     }
 
@@ -111,22 +111,6 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.container_view, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -223,7 +207,6 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
                 transaction.commit();
                 helper_my_product = true;
             }
-
         } else if (id == R.id.nav_favorite) {
             toolbar.setTitle("My Favorite");
             helper_home = false;
@@ -250,43 +233,43 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(ContainerView.this, LoginActivity.class);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_about) {
-            toolbar.setTitle("About us");
-            helper_home = false;
-            helper_product = false;
-            helper_account = false;
-            helper_my_product = false;
-            helper_favorite = false;
-            helper_sell = false;
-            helper_language = false;
-            if (helper_about == false) {
-                FragmentAbout fragmentAbout = new FragmentAbout();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container_framelayout, fragmentAbout);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                helper_about = true;
-            }
-
-        } else if (id == R.id.nav_language) {
-            toolbar.setTitle("Language");
-            helper_home = false;
-            helper_product = false;
-            helper_account = false;
-            helper_my_product = false;
-            helper_favorite = false;
-            helper_about = false;
-            helper_sell = false;
-            if (helper_language == false) {
-                FragmentLanguage fragmentLanguage = new FragmentLanguage();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.container_framelayout, fragmentLanguage);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                helper_language = true;
-            }
-
         }
+//        else if (id == R.id.nav_about) {
+//            toolbar.setTitle("About us");
+//            helper_home = false;
+//            helper_product = false;
+//            helper_account = false;
+//            helper_my_product = false;
+//            helper_favorite = false;
+//            helper_sell = false;
+//            helper_language = false;
+//            if (helper_about == false) {
+//                FragmentAbout fragmentAbout = new FragmentAbout();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.add(R.id.container_framelayout, fragmentAbout);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//                helper_about = true;
+//            }
+//
+//        } else if (id == R.id.nav_language) {
+//            toolbar.setTitle("Language");
+//            helper_home = false;
+//            helper_product = false;
+//            helper_account = false;
+//            helper_my_product = false;
+//            helper_favorite = false;
+//            helper_about = false;
+//            helper_sell = false;
+//            if (helper_language == false) {
+//                FragmentLanguage fragmentLanguage = new FragmentLanguage();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.add(R.id.container_framelayout, fragmentLanguage);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//                helper_language = true;
+//            }
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

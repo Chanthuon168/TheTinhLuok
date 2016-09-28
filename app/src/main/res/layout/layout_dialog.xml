@@ -41,6 +41,8 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textStyle="bold"
+            android:textAllCaps="true"
             android:id="@+id/cancel"
             android:background="@drawable/button_item"
             android:clickable="true"
@@ -51,6 +53,8 @@
             android:textColor="@color/colorAccent" />
 
         <TextView
+            android:textStyle="bold"
+            android:textAllCaps="true"
             android:id="@+id/ok"
             android:background="@drawable/button_item"
             android:clickable="true"

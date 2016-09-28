@@ -78,7 +78,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
         context = holder.image.getContext();
         Picasso.with(context).load(uri).into(holder.image);
         holder.price.setText("$" + products.get(position).getPrice());
-        holder.discount.setText("(" + products.get(position).getDiscount() + "% OFF)");
+        if (!products.get(position).getDiscount().equals("0")) {
+            holder.discount.setText("(" + products.get(position).getDiscount() + "% OFF)");
+        }
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -42,6 +42,9 @@ public class Product {
     private String proId;
     @SerializedName("created_at")
     private String createdAt;
+    @SerializedName("address")
+    private String address;
+
     public Product() {
     }
 
@@ -187,5 +190,13 @@ public class Product {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

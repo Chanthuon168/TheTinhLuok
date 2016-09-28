@@ -107,7 +107,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private EditText titleProduct, price, discount, size, color, description, name, email, phone, phone2;
+    private EditText titleProduct, price, discount, size, color, description, name, email, phone, phone2, address;
     private CheckBox checkBox;
     private TextView read, next;
     private IconTextView iconNext;
@@ -146,6 +146,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         recyclerViewCategory = (RecyclerView) root.findViewById(R.id.recyclerViewCategory);
         recyclerViewPhoto = (RecyclerView) root.findViewById(R.id.recyclerViewPhoto);
         l_next = (LinearLayout) root.findViewById(R.id.l_next);
+        address = (EditText) root.findViewById(R.id.address);
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManagerPhoto = new GridLayoutManager(getActivity(), 2);
         categoryAdapter = new CategoryAdapter(getActivity(), categories);
@@ -403,6 +404,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     email.setText(obj.getString("email"));
                     phone.setText(obj.getString("phone"));
                     phone2.setText(obj.getString("phone2"));
+                    address.setText(obj.getString("address"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -489,7 +491,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
         icon.setText("{fa-check-circle-o}");
         TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
-        cancel.setText("Successfully");
+        cancel.setText("SUCCESS");
         viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -512,6 +514,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         final String strEmail = email.getText().toString();
         final String strPhone = phone.getText().toString();
         final String strPhone2 = phone2.getText().toString();
+        final String strAddress = address.getText().toString();
         StringRequest userReq = new StringRequest(Request.Method.POST, Constant.URL_SAVEPRODUCT, new Response.Listener<String>() {
             @Override
             public void onResponse(final String proId) {
@@ -569,6 +572,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 params.put("phone", strPhone);
                 params.put("phone2", strPhone2);
                 params.put("social_link", user.getSocialLink());
+                params.put("address", strAddress);
                 return params;
             }
         };

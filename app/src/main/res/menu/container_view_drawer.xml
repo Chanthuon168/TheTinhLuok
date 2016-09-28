@@ -31,17 +31,17 @@
             </group>
         </menu>
     </item>
-    <item android:title="Setting">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_about"
-                    android:title="About us" />
-                <item
-                    android:id="@+id/nav_language"
-                    android:title="Language" />
-            </group>
-        </menu>
-    </item>
+    <!--<item android:title="Setting">-->
+        <!--<menu>-->
+            <!--<group android:checkableBehavior="single">-->
+                <!--<item-->
+                    <!--android:id="@+id/nav_about"-->
+                    <!--android:title="About us" />-->
+                <!--<item-->
+                    <!--android:id="@+id/nav_language"-->
+                    <!--android:title="Language" />-->
+            <!--</group>-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>

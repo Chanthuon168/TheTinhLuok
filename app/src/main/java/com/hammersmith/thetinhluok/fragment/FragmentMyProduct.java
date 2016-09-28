@@ -48,7 +48,7 @@ public class FragmentMyProduct extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_my_product, container, false);
+        final View root = inflater.inflate(R.layout.fragment_my_product, container, false);
         user = PrefUtils.getCurrentUser(getActivity());
         recyclerViewMyProduct = (RecyclerView) root.findViewById(R.id.recyclerViewMyProduct);
         layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -61,9 +61,13 @@ public class FragmentMyProduct extends Fragment {
             @Override
             public void onResponse(Call<List<MyProduct>> call, Response<List<MyProduct>> response) {
                 myProducts = response.body();
-                myProductAdapter = new MyProductAdapter(getActivity(), myProducts);
-                recyclerViewMyProduct.setAdapter(myProductAdapter);
-                myProductAdapter.notifyDataSetChanged();
+                if (myProducts.size() < 1){
+                    root.findViewById(R.id.noMyProduct).setVisibility(View.VISIBLE);
+                }else {
+                    myProductAdapter = new MyProductAdapter(getActivity(), myProducts);
+                    recyclerViewMyProduct.setAdapter(myProductAdapter);
+                    myProductAdapter.notifyDataSetChanged();
+                }
                 hideProgressDialog();
             }
 
