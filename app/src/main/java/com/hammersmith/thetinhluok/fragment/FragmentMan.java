@@ -46,7 +46,7 @@ public class FragmentMan extends Fragment {
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
-//        showProgressDialog();
+        showProgressDialog();
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -65,7 +65,7 @@ public class FragmentMan extends Fragment {
                 adapter = new ProductAdapter(getActivity(), products);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-//                hideProgressDialog();
+                hideProgressDialog();
             }
 
             @Override

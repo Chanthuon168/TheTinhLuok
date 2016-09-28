@@ -112,7 +112,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     private TextView read, next;
     private IconTextView iconNext;
     private User user;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog, dialog;
 
     public FragmentSell() {
     }
@@ -125,6 +125,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         root.findViewById(R.id.l_back).setOnClickListener(this);
         root.findViewById(R.id.l_next).setOnClickListener(this);
         root.findViewById(R.id.lImportPhoto).setOnClickListener(this);
+        root.findViewById(R.id.read).setOnClickListener(this);
         titleProduct = (EditText) root.findViewById(R.id.titleProduct);
         price = (EditText) root.findViewById(R.id.price);
         discount = (EditText) root.findViewById(R.id.discount);
@@ -156,7 +157,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         myCommand = new MyCommand(getActivity());
         verifyStoragePermissions(getActivity());
         filterCategory();
-
+        showDialog();
         photoAdapter = new PhotoAdapter(getActivity(), imgpath);
         recyclerViewPhoto.setLayoutManager(layoutManagerPhoto);
         recyclerViewPhoto.setAdapter(photoAdapter);
@@ -195,6 +196,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
             JsonArrayRequest fieldReq = new JsonArrayRequest(Constant.URL_CATEGORY, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray jsonArray) {
+                    hideDialog();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         try {
                             JSONObject obj = jsonArray.getJSONObject(i);
@@ -321,6 +323,49 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 intent.putExtra(Constants.INTENT_EXTRA_LIMIT, 4);
                 startActivityForResult(intent, Constants.REQUEST_CODE);
                 break;
+            case R.id.read:
+                LayoutInflater factory = LayoutInflater.from(getActivity());
+                final View viewDialog = factory.inflate(R.layout.dialog, null);
+                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+                dialog.setView(viewDialog);
+                TextView message = (TextView) viewDialog.findViewById(R.id.message);
+                message.setText("What is a Privacy Policy\n" +
+                        "\n" +
+                        "A Privacy Policy is the legal statement that specifies what the business owner does with the personal data collected from users, along with how the data is processed and why.\n" +
+                        "\n" +
+                        "In 1968, Council of Europe did studies on the threat of the Internet expansion as they were concerned with the effects of technology on human rights. This lead to the development of policies that were to be developed to protect personal data.\n" +
+                        "\n" +
+                        "This marks the start of what we know now as a “Privacy Policy”. While the name “Privacy Policy” refers to the legal agreement, the concept of privacy and protecting user data is closely related.\n" +
+                        "\n" +
+                        "This agreement can also be known under these names:\n" +
+                        "\n" +
+                        "Privacy Statement\n" +
+                        "Privacy Notice\n" +
+                        "Privacy Information\n" +
+                        "Privacy Page\n" +
+                        "The Privacy Policy can be used for both your website and mobile app if it’s adapted to include the platforms your business operates on.\n" +
+                        "\n" +
+                        "The contents of a Privacy Policy may differ from one country to another, depending on the country legislation, but most privacy laws identify the following critical points that a business must comply with when dealing with personal data:\n" +
+                        "\n" +
+                        "Notice. Data collectors (meaning, you or your company) must make clear what they are doing with the personal information from users before gathering it.\n" +
+                        "Choice. The companies collecting the data must respect the choices of users on what information to provide and how personal that provided information will be.\n" +
+                        "Access. Users should be able to view or contest the accuracy of personal data collected by the company.\n" +
+                        "Security. The companies are entirely responsible for the accuracy and security (keeping it properly away from unauthorized eyes and hands) of the collected personal information.\n" +
+                        "This means that a “Privacy Policy” serves as a way to inform users how their personal information will be used, along with how the information will be collected and who has access to it.\n" +
+                        "\n" +
+                        "Who needs a Privacy Policy\n" +
+                        "\n" +
+                        "Any entity (company or individual) that collects or uses personal information from users will need a Privacy Policy.\n" +
+                        "\n" +
+                        "A Privacy Policy is required regardless of the type of platform your business operates on or what kind of industry you are in:\n" +
+                        "\n" +
+                        "Web sites\n" +
+                        "WordPress blogs, or any other platforms: Joomla!, Drupal etc.\n" +
+                        "E-commerce stores\n" +
+                        "Mobile apps. Not having a Privacy Policy can be a reason for rejection during the app review.\n" +
+                        "A Privacy Policy is required for all iOS apps. Section 17 of “Apple’s App Store Review Guidelines” and the “iOS Developer Program License” require developers with apps that collect personal information from users to have this legal agreement.");
+                dialog.show();
+                break;
         }
     }
 
@@ -344,23 +389,20 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         for (String imagePath : imageList) {
             try {
                 Bitmap bitmap = PhotoLoader.init().from(imagePath).requestSize(512, 512).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                final String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                String url = ApiClient.BASE_URL + "upload.php";
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+                byte[] byteFormat = stream.toByteArray();
+                final String encoded = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+
+                String url = ApiClient.BASE_URL + "upload/image";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("response", response);
                         fileName.add(response);
-                        Log.d("fileName", "" + fileName);
                         if (fileName.size() == imageList.size()) {
                             saveProduct();
                         }
-//                        if (response.equals("uploaded_success")){
-//                            sellProduct();
-//                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -592,6 +634,22 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         mProgressDialog.show();
     }
 
+    private void showDialog(){
+        if (dialog == null) {
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading...");
+            dialog.setIndeterminate(true);
+        }
+
+        dialog.show();
+    }
+
+    private void hideDialog(){
+        if (dialog != null && dialog.isShowing()) {
+            dialog.hide();
+        }
+    }
+
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
@@ -602,6 +660,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     public void onDestroy() {
         super.onDestroy();
         hideProgressDialog();
+        hideDialog();
     }
 
     @Override
@@ -613,4 +672,5 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     public void onDetach() {
         super.onDetach();
     }
+
 }

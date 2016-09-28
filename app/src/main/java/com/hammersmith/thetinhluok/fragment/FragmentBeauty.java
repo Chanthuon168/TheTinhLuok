@@ -46,7 +46,7 @@ public class FragmentBeauty extends Fragment {
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
-//        showProgressDialog();
+        showProgressDialog();
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
