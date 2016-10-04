@@ -54,6 +54,7 @@ public class FragmentHome extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private int sizePromotion, sizeProduct;
     private ProgressDialog mProgressDialog;
+    private int columns;
 
     public FragmentHome() {
 
@@ -72,6 +73,7 @@ public class FragmentHome extends Fragment {
         listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
         viewBannerGallery.flip(listData, true);
         showProgressDialog();
+        columns = getResources().getInteger(R.integer.number_column);
 
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
@@ -114,7 +116,7 @@ public class FragmentHome extends Fragment {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = response.body();
                 sizeProduct = products.size();
-                layoutManager = new GridLayoutManager(getActivity(), 2);
+                layoutManager = new GridLayoutManager(getActivity(), columns);
                 recyclerView.setLayoutManager(layoutManager);
                 adapter = new ProductAdapter(getActivity(), products);
                 recyclerView.setAdapter(adapter);
@@ -205,7 +207,7 @@ public class FragmentHome extends Fragment {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = response.body();
                 if (products.size() != sizeProduct) {
-                    layoutManager = new GridLayoutManager(getActivity(), 2);
+                    layoutManager = new GridLayoutManager(getActivity(), columns);
                     recyclerView.setLayoutManager(layoutManager);
                     adapter = new ProductAdapter(getActivity(), products);
                     recyclerView.setAdapter(adapter);

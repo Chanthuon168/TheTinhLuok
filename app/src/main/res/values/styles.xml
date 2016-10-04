@@ -32,4 +32,16 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_from_left_reply</item>
         <item name="android:windowExitAnimation">@anim/slide_in_from_right_reply</item>
     </style>
+
+    <style name="MyEditTextTheme">
+        <item name="colorControlNormal">#fff</item>
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay">
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
+    <style name="ActionBarThemeOverlay">
+        <item name="colorControlNormal">#ffffff</item>
+    </style>
 </resources>

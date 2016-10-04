@@ -44,9 +44,10 @@ public class FragmentGeneral extends Fragment {
         View root = inflater.inflate(R.layout.fragment_woman, container, false);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
+        final int columns = getResources().getInteger(R.integer.number_column);
+        layoutManager = new GridLayoutManager(getActivity(), columns);
         recyclerView.setLayoutManager(layoutManager);
-        showProgressDialog();
+//        showProgressDialog();
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -28,16 +28,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <View
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:background="@color/colorPrimary" />
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:background="@drawable/bg_grandient"
+                            android:layout_width="match_parent"
+                            android:layout_height="5dp"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@color/colorPrimary" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="10dp">
+                        android:padding="20dp">
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
@@ -45,17 +57,17 @@
 
                             <ImageView
                                 android:id="@+id/profile"
-                                android:layout_width="130dp"
-                                android:layout_height="130dp"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
                                 android:background="@color/white"
                                 android:padding="1dp"
                                 android:src="@drawable/user" />
 
                             <LinearLayout
-                                android:layout_width="130dp"
+                                android:layout_width="150dp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
-                                android:gravity="end">
+                                android:gravity="right">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -93,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="30dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -251,12 +263,12 @@
                         android:id="@+id/lSave"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="25dp"
                         android:background="@drawable/button_save"
                         android:clickable="true"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="7dp">
+                        android:padding="10dp">
 
                         <com.joanzapata.iconify.widget.IconTextView
                             android:layout_width="wrap_content"

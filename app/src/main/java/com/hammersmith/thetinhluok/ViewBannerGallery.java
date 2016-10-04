@@ -1,8 +1,10 @@
 package com.hammersmith.thetinhluok;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -38,7 +40,7 @@ public class ViewBannerGallery extends RelativeLayout {
     private ArrayList<BannerItem> mListData = new ArrayList<>();
     LinearLayout layoutBannerIndex;
     private boolean beforeSizeChanged = true;
-    private int dotSize = 15;
+    private int dotSize = 10;
 
 
     private Handler mHandler = new Handler() {
@@ -79,16 +81,16 @@ public class ViewBannerGallery extends RelativeLayout {
                                 if (bitmap != null) {
                                     iv.setImageBitmap(bitmap);
                                     mViewFlipper.addView(iv);
-//                                    if (!TextUtils.isEmpty(item.linkUrl) && item.linkUrl.startsWith("http://")) {
-//                                        iv.setOnClickListener(new OnClickListener() {
-//                                            @Override
-//                                            public void onClick(View v) {
-//                                                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                                                intent.setData(Uri.parse(item.linkUrl));
-//                                                mContext.startActivity(intent);
-//                                            }
-//                                        });
-//                                    }
+                                    if (!TextUtils.isEmpty(item.linkUrl) && item.linkUrl.startsWith("http://")) {
+                                        iv.setOnClickListener(new OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                intent.setData(Uri.parse(item.linkUrl));
+                                                mContext.startActivity(intent);
+                                            }
+                                        });
+                                    }
 
                                     ImageView image = new ImageView(mContext);
                                     image.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -234,7 +236,7 @@ public class ViewBannerGallery extends RelativeLayout {
         log("onSizeChanged()");
         log("this.getWdith():" + this.getWidth());
         ViewGroup.LayoutParams params = this.getLayoutParams();
-        params.height = this.getWidth() * 3 / 7;
+        params.height = this.getWidth() * 3 / 8;
         this.setLayoutParams(params);
         log("params new height:" + params.height);
         beforeSizeChanged = false;

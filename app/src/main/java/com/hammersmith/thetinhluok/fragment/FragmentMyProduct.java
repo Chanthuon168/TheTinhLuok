@@ -51,7 +51,8 @@ public class FragmentMyProduct extends Fragment {
         final View root = inflater.inflate(R.layout.fragment_my_product, container, false);
         user = PrefUtils.getCurrentUser(getActivity());
         recyclerViewMyProduct = (RecyclerView) root.findViewById(R.id.recyclerViewMyProduct);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
+        final int columns = getResources().getInteger(R.integer.number_column);
+        layoutManager = new GridLayoutManager(getActivity(), columns);
         recyclerViewMyProduct.setLayoutManager(layoutManager);
         showProgressDialog();
 

@@ -556,7 +556,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         final View viewDialog = factory.inflate(R.layout.layout_dialog_contact, null);
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
         dialog.setView(viewDialog);
-        TextView activate = (TextView) viewDialog.findViewById(R.id.ok);
+        LinearLayout activate = (LinearLayout) viewDialog.findViewById(R.id.ok);
         LinearLayout layoutEmail = (LinearLayout) viewDialog.findViewById(R.id.l_email);
         activate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -564,7 +564,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 dialog.dismiss();
             }
         });
-        viewDialog.findViewById(R.id.cancel).setVisibility(View.GONE);
         viewDialog.findViewById(R.id.l_call).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

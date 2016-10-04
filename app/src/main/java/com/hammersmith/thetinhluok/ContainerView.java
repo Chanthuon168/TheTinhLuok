@@ -17,9 +17,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -32,9 +36,11 @@ import com.hammersmith.thetinhluok.fragment.FragmentMyProduct;
 import com.hammersmith.thetinhluok.fragment.FragmentProduct;
 import com.hammersmith.thetinhluok.fragment.FragmentSell;
 import com.hammersmith.thetinhluok.model.User;
+import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.MaterialIcons;
+import com.joanzapata.iconify.widget.IconButton;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Picasso;
 
@@ -104,6 +110,36 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
 //        m.findItem(R.id.nav_about).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info));
 //        m.findItem(R.id.nav_language).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_language));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.container_menu, menu);
+        MenuItem itemSearch = menu.findItem(R.id.search);
+        RelativeLayout layoutSearch = (RelativeLayout) itemSearch.getActionView();
+        IconTextView iconSearch = (IconTextView) layoutSearch.findViewById(R.id.hotlist_bell);
+        iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentNew = new Intent(ContainerView.this, SearchActivity.class);
+//                intentNew.putExtra("pro_id", promotions.get(position).getId());
+                intentNew.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intentNew);
+            }
+        });
+
+        MenuItem itemMessage = menu.findItem(R.id.menu_messages);
+        RelativeLayout layoutMessage = (RelativeLayout) itemMessage.getActionView();
+        IconButton iconMessage = (IconButton) layoutMessage.findViewById(R.id.badge_icon_button);
+        final TextView textView = (TextView) layoutMessage.findViewById(R.id.badge_textView);
+        iconMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textView.setVisibility(View.GONE);
+            }
+        });
+
+        return (super.onCreateOptionsMenu(menu));
     }
 
     private void initScreen() {
@@ -286,6 +322,7 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public static void verifyStoragePermissions(Activity activity) {
         int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {

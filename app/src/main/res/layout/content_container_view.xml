@@ -25,7 +25,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
+                    android:layout_height="wrap_content">
 
                     <com.hammersmith.thetinhluok.ViewBannerGallery
                         android:id="@+id/viewBannerGallery"

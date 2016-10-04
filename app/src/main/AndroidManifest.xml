@@ -74,12 +74,20 @@
         </activity>
         <activity
             android:name=".ImageActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity
+            android:name=".SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ContainerView" />
+
+        </activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.hammersmith.thetinhluok;
 
+import android.app.ProgressDialog;
+
 import com.hammersmith.thetinhluok.model.Category;
 import com.hammersmith.thetinhluok.model.Comment;
 import com.hammersmith.thetinhluok.model.Favorite;
@@ -90,4 +92,7 @@ public interface ApiInterface {
 
     @GET("get/category")
     Call<List<Category>> getCategory ();
+
+    @GET("filter/{name}")
+    Call<List<Product>> filterByName (@Path("name") String name);
 }
