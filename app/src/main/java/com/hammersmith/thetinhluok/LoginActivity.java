@@ -257,6 +257,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void saveUserSocial(String name, String email, String photo, String socialLink, String socialType) {
+        showProgressDialog();
         user = new User(name, email, photo, socialLink, socialType);
         ApiInterface serviceUserLogin = ApiClient.getClient().create(ApiInterface.class);
         Call<User> callLogin = serviceUserLogin.createUserBySocial(user);

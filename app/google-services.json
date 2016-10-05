@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "38732738414",
-    "project_id": "the-tinhluok-142905"
+    "firebase_url": "https://the-tinhluok-142905.firebaseio.com",
+    "project_id": "the-tinhluok-142905",
+    "storage_bucket": "the-tinhluok-142905.appspot.com"
   },
   "client": [
     {
@@ -21,25 +23,30 @@
           }
         },
         {
+          "client_id": "38732738414-l11r3arptr1bbgt9kmrg6net8ihq565c.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "38732738414-5r4iccc6ctrflebkcv5o761pu2724rdl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB8p-d6iBLSy-cxO4wpLHveq1GaulmyGx0"
-        }
-      ],
+      "api_key": [{ "current_key": "AIzaSyBkwaAYZphnWT_h4_Xx9wHQyA1Km6iHtjc" }],
       "services": {
         "analytics_service": {
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "38732738414-l11r3arptr1bbgt9kmrg6net8ihq565c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

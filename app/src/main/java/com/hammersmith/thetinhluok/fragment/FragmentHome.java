@@ -72,7 +72,7 @@ public class FragmentHome extends Fragment {
         listData.add(viewBannerGallery.new BannerItem("http://www.gobeautyvoice.com/images/beauty_banner11.jpg", "http://www.gobeautyvoice.com", "Beauty Shop"));
         listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
         viewBannerGallery.flip(listData, true);
-        showProgressDialog();
+//        showProgressDialog();
         columns = getResources().getInteger(R.integer.number_column);
 
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);

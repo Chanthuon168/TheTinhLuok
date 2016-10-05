@@ -77,8 +77,12 @@ public class SearchActivity extends AppCompatActivity {
                         public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                             products = response.body();
                             if (products.size() < 1) {
-                                Toast.makeText(getApplicationContext(), "Product not found", Toast.LENGTH_SHORT).show();
+                                findViewById(R.id.txtFilter).setVisibility(View.VISIBLE);
+                                adapter = new ProductAdapter(SearchActivity.this, products);
+                                recyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
                             } else {
+                                findViewById(R.id.txtFilter).setVisibility(View.GONE);
                                 adapter = new ProductAdapter(SearchActivity.this, products);
                                 recyclerView.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();

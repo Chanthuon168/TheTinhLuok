@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 
 import com.hammersmith.thetinhluok.model.Category;
 import com.hammersmith.thetinhluok.model.Comment;
+import com.hammersmith.thetinhluok.model.DeviceToken;
 import com.hammersmith.thetinhluok.model.Favorite;
 import com.hammersmith.thetinhluok.model.Image;
 import com.hammersmith.thetinhluok.model.Love;
@@ -95,4 +96,7 @@ public interface ApiInterface {
 
     @GET("filter/{name}")
     Call<List<Product>> filterByName (@Path("name") String name);
+
+    @POST("create/deviceToken")
+    Call<DeviceToken> createDeviceToken (@Body DeviceToken deviceToken);
 }
