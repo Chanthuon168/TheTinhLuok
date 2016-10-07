@@ -24,10 +24,12 @@ import java.util.List;
 public class ViewPagerAdapter extends PagerAdapter {
     Context ssContext;
     private List<Image> images = new ArrayList<>();
+    int position;
 
-    public ViewPagerAdapter(Context ssContext, List<Image> images) {
+    public ViewPagerAdapter(Context ssContext, List<Image> images, int position) {
         this.ssContext = ssContext;
         this.images = images;
+        this.position = position;
     }
 
     @Override

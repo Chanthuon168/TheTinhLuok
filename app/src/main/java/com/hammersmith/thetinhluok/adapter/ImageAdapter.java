@@ -50,6 +50,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
             public void onClick(View view) {
                 Intent intent = new Intent(activity, ImageActivity.class);
                 intent.putExtra("pro_id", images.get(position).getProId());
+                intent.putExtra("position", position);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 activity.startActivity(intent);
             }

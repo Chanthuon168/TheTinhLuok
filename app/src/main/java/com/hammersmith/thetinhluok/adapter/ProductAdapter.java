@@ -3,6 +3,8 @@ package com.hammersmith.thetinhluok.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +35,10 @@ import com.hammersmith.thetinhluok.model.Product;
 import com.hammersmith.thetinhluok.model.User;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,6 +83,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
         Uri uri = Uri.parse(ApiClient.BASE_URL + products.get(position).getImage());
         context = holder.image.getContext();
         Picasso.with(context).load(uri).into(holder.image);
+//        holder.image.setImageBitmap(getBitmapFromURL(ApiClient.BASE_URL+products.get(position).getImage()));
         holder.price.setText("$" + products.get(position).getPrice());
         if (!products.get(position).getDiscount().equals("0")) {
             holder.discount.setText("(" + products.get(position).getDiscount() + "% OFF)");
@@ -395,6 +402,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewAd
             iconComment = (ImageView) itemView.findViewById(R.id.comment);
             txtNumLove = (TextView) itemView.findViewById(R.id.txtNumLove);
             txtNumComment = (TextView) itemView.findViewById(R.id.txtNumComment);
+        }
+    }
+    public Bitmap getBitmapFromURL(String strURL) {
+        try {
+            URL url = new URL(strURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

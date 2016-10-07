@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +36,7 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.Api;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hammersmith.thetinhluok.fragment.FragmentAbout;
 import com.hammersmith.thetinhluok.fragment.FragmentAccount;
 import com.hammersmith.thetinhluok.fragment.FragmentFavorite;
@@ -77,8 +80,9 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
     private DeviceToken deviceToken;
+    private static final String TAG = ContainerView.class.getSimpleName();
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +198,8 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
         RelativeLayout layoutMessage = (RelativeLayout) itemMessage.getActionView();
         IconButton iconMessage = (IconButton) layoutMessage.findViewById(R.id.badge_icon_button);
         final TextView textView = (TextView) layoutMessage.findViewById(R.id.badge_textView);
+        textView.setText("1");
+
         iconMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

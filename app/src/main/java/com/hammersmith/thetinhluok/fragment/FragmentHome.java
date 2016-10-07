@@ -25,6 +25,7 @@ import com.hammersmith.thetinhluok.R;
 import com.hammersmith.thetinhluok.ViewBannerGallery;
 import com.hammersmith.thetinhluok.adapter.ProductAdapter;
 import com.hammersmith.thetinhluok.adapter.PromotionAdapter;
+import com.hammersmith.thetinhluok.model.Banner;
 import com.hammersmith.thetinhluok.model.Product;
 import com.hammersmith.thetinhluok.model.Promotion;
 import com.joanzapata.iconify.widget.IconTextView;
@@ -55,6 +56,7 @@ public class FragmentHome extends Fragment {
     private int sizePromotion, sizeProduct;
     private ProgressDialog mProgressDialog;
     private int columns;
+    private List<Banner> banners = new ArrayList<>();
 
     public FragmentHome() {
 
@@ -65,14 +67,34 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.content_container_view, container, false);
 
-        ViewBannerGallery viewBannerGallery = (ViewBannerGallery) root.findViewById(R.id.viewBannerGallery);
-        ArrayList<ViewBannerGallery.BannerItem> listData = new ArrayList<ViewBannerGallery.BannerItem>();
-        listData.add(viewBannerGallery.new BannerItem("http://www.bdonlinemart.com/content/images/thumbs/0002578_electronics.jpeg", "http://www.bdonlinemart.com", "Electronic Shop"));
-        listData.add(viewBannerGallery.new BannerItem("http://www.sushmii.com/image/cache/data/Home%20page%20Banner/slide%203-960x400.jpg", "http://www.sushmii.com", "Jewellery Shop"));
-        listData.add(viewBannerGallery.new BannerItem("http://www.gobeautyvoice.com/images/beauty_banner11.jpg", "http://www.gobeautyvoice.com", "Beauty Shop"));
-        listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
-        viewBannerGallery.flip(listData, true);
-//        showProgressDialog();
+        final ViewBannerGallery viewBannerGallery = (ViewBannerGallery) root.findViewById(R.id.viewBannerGallery);
+        final ArrayList<ViewBannerGallery.BannerItem> listData = new ArrayList<ViewBannerGallery.BannerItem>();
+
+        ApiInterface serviceBanner = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Banner>> callBanner = serviceBanner.getBanner();
+        callBanner.enqueue(new Callback<List<Banner>>() {
+            @Override
+            public void onResponse(Call<List<Banner>> call, Response<List<Banner>> response) {
+                banners = response.body();
+                for (int i = 0; i < banners.size(); i++) {
+                    listData.add(viewBannerGallery.new BannerItem(banners.get(i).getImage(), banners.get(i).getWebsite(), banners.get(i).getTitle()));
+                }
+                viewBannerGallery.flip(listData, true);
+            }
+
+            @Override
+            public void onFailure(Call<List<Banner>> call, Throwable t) {
+
+            }
+        });
+
+//        listData.add(viewBannerGallery.new BannerItem("http://www.bdonlinemart.com/content/images/thumbs/0002578_electronics.jpeg", "http://www.bdonlinemart.com", "Electronic Shop"));
+//        listData.add(viewBannerGallery.new BannerItem("http://www.sushmii.com/image/cache/data/Home%20page%20Banner/slide%203-960x400.jpg", "http://www.sushmii.com", "Jewellery Shop"));
+//        listData.add(viewBannerGallery.new BannerItem("http://www.gobeautyvoice.com/images/beauty_banner11.jpg", "http://www.gobeautyvoice.com", "Beauty Shop"));
+//        listData.add(viewBannerGallery.new BannerItem("https://s-media-cache-ak0.pinimg.com/736x/ae/8b/a7/ae8ba78b7be130e1afdf659947735128.jpg", "https://s-media-cache-ak0.pinimg.com", "Woman Fashion"));
+
+//        viewBannerGallery.flip(listData, true);
+        showProgressDialog();
         columns = getResources().getInteger(R.integer.number_column);
 
         swipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);

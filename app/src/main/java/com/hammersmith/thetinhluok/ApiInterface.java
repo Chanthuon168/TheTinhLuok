@@ -2,6 +2,7 @@ package com.hammersmith.thetinhluok;
 
 import android.app.ProgressDialog;
 
+import com.hammersmith.thetinhluok.model.Banner;
 import com.hammersmith.thetinhluok.model.Category;
 import com.hammersmith.thetinhluok.model.Comment;
 import com.hammersmith.thetinhluok.model.DeviceToken;
@@ -99,4 +100,7 @@ public interface ApiInterface {
 
     @POST("create/deviceToken")
     Call<DeviceToken> createDeviceToken (@Body DeviceToken deviceToken);
+
+    @GET("get/banner")
+    Call<List<Banner>> getBanner ();
 }

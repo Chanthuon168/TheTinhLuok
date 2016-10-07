@@ -20,7 +20,7 @@ public class ImageActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private ViewPagerAdapter mCustomPagerAdapter;
     private List<Image> images = new ArrayList<>();
-    private int proId;
+    private int proId, position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +28,14 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
         mViewPager = (ViewPager) findViewById(R.id.myviewpager);
         proId = getIntent().getIntExtra("pro_id", 0);
+        position = getIntent().getIntExtra("position", 0);
         ApiInterface serviceImage = ApiClient.getClient().create(ApiInterface.class);
         Call<List<Image>> callImage = serviceImage.getImage(proId);
         callImage.enqueue(new Callback<List<Image>>() {
             @Override
             public void onResponse(Call<List<Image>> call, Response<List<Image>> response) {
                 images = response.body();
-                mCustomPagerAdapter = new ViewPagerAdapter(ImageActivity.this, images);
+                mCustomPagerAdapter = new ViewPagerAdapter(ImageActivity.this, images, position);
                 mViewPager.setAdapter(mCustomPagerAdapter);
                 mCustomPagerAdapter.notifyDataSetChanged();
             }
