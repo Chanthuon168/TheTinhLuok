@@ -14,6 +14,7 @@ public class GCMTokenRefreshListenerService extends InstanceIDListenerService {
     @Override
     public void onTokenRefresh() {
         Intent intent = new Intent(this, GCMRegistrationIntentService.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startService(intent);
     }
 }

@@ -32,6 +32,10 @@ public class User {
     public User() {
     }
 
+    public User(String socialLink) {
+        this.socialLink = socialLink;
+    }
+
     public User(String name, String email, String photo, String socialLink, String socialType) {
         this.name = name;
         this.email = email;

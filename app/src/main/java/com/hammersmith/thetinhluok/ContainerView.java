@@ -63,7 +63,7 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
     private FragmentHome fragmentHome;
     private TextView name, email;
     private RoundedImageView profile;
-    private User user;
+    private User user, userSocial;
     private Context context = ContainerView.this;
     private View mHeaderView;
     private Boolean helper_home = false;
@@ -157,11 +157,26 @@ public class ContainerView extends AppCompatActivity implements NavigationView.O
         name = (TextView) mHeaderView.findViewById(R.id.name);
         email = (TextView) mHeaderView.findViewById(R.id.email);
         profile = (RoundedImageView) mHeaderView.findViewById(R.id.profile);
-        name.setText(user.getName());
-        email.setText(user.getEmail());
-        Uri uri = Uri.parse(user.getPhoto());
-        context = profile.getContext();
-        Picasso.with(context).load(uri).into(profile);
+
+        userSocial = new User(user.getSocialLink());
+        ApiInterface serviceUser = ApiClient.getClient().create(ApiInterface.class);
+        Call<User> callUser = serviceUser.getUser(user);
+        callUser.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                user = response.body();
+                name.setText(user.getName());
+                email.setText(user.getEmail());
+                Uri uri = Uri.parse(user.getPhoto());
+                context = profile.getContext();
+                Picasso.with(context).load(uri).into(profile);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
 
         verifyStoragePermissions(ContainerView.this);
 

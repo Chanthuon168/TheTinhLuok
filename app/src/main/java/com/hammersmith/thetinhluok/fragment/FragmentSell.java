@@ -97,6 +97,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
     private TextView txtProcess;
     private List<String> imgpath = new ArrayList<>();
     private List<String> fileName = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
     private int catId;
     int socketTimeout = 60000;
     RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
@@ -400,6 +401,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                     public void onResponse(String response) {
                         Log.d("response", response);
                         fileName.add(response);
+                        images.add(response);
                         if (fileName.size() == imageList.size()) {
                             saveProduct();
                         }
@@ -407,7 +409,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity(), "Error while uploading image", Toast.LENGTH_SHORT).show();
+                        dialogError("Error while uploading product");
                     }
                 }) {
                     @Override
@@ -419,7 +421,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
                 };
                 myCommand.add(stringRequest);
             } catch (FileNotFoundException e) {
-                Toast.makeText(getContext(), "Error while loading image", Toast.LENGTH_SHORT).show();
+                dialogError("Error while uploading product");
             }
         }
         myCommand.execute();
@@ -537,8 +539,31 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pushNotification();
                 startActivity(new Intent(getActivity(), ContainerView.class));
                 getActivity().finish();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void dialogError(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog_new, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-exclamation-circle}");
+        TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
+        cancel.setText("Try again");
+        viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                uploadFile();
             }
         });
 
@@ -634,7 +659,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         mProgressDialog.show();
     }
 
-    private void showDialog(){
+    private void showDialog() {
         if (dialog == null) {
             dialog = new ProgressDialog(getActivity());
             dialog.setMessage("Loading...");
@@ -644,7 +669,7 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         dialog.show();
     }
 
-    private void hideDialog(){
+    private void hideDialog() {
         if (dialog != null && dialog.isShowing()) {
             dialog.hide();
         }
@@ -673,4 +698,31 @@ public class FragmentSell extends Fragment implements CategoryAdapter.ClickListe
         super.onDetach();
     }
 
+    public void pushNotification() {
+        StringRequest userReq = new StringRequest(Request.Method.POST, Constant.URL_PUSH_NOTIFICATION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(final String proId) {
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(getActivity(), " " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+                        Log.w("volleyError", "" + volleyError.toString());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("message", user.getName() + " recently added new product");
+                params.put("image", ApiClient.BASE_URL + "images/" + images.get(0));
+                return params;
+            }
+        };
+        int socketTimeout = 60000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        userReq.setRetryPolicy(policy);
+        MyApplication.getInstance().addToRequestQueue(userReq);
+    }
 }

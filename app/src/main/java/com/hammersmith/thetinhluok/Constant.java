@@ -9,4 +9,5 @@ public class Constant {
     public static final String URL_SAVEPRODUCT = ApiClient.BASE_URL + "save/product";
     public static final String URL_SAVEIMAGE = ApiClient.BASE_URL + "save/image";
     public static final String URL_UPDATEUSER = ApiClient.BASE_URL + "user/update";
+    public static final String URL_PUSH_NOTIFICATION = ApiClient.BASE_URL + "push/notification";
 }

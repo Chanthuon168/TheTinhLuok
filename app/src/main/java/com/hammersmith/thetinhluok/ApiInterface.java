@@ -103,4 +103,7 @@ public interface ApiInterface {
 
     @GET("get/banner")
     Call<List<Banner>> getBanner ();
+
+    @POST("get/user")
+    Call<User> getUser (@Body User user);
 }

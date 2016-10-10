@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -26,16 +27,18 @@ public class GCMPushReceiverService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
-        sendNotification(message);
+        String image = data.getString("image");
+        sendNotification(message, image);
     }
-    private void sendNotification(String message) {
+
+    private void sendNotification(String message, String image) {
         Intent intent = new Intent(this, ContainerView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         int requestCode = 0;//Your request code
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle("The TinhLuok");
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
-        bigPictureStyle.bigPicture(getBitmapFromURL("https://cdn0.vox-cdn.com/thumbor/S41VFVk6_ltBJzRGwJvWYagrBaA=/cdn0.vox-cdn.com/uploads/chorus_asset/file/4097114/verge-04DSC09210.0.jpg"));
+        bigPictureStyle.bigPicture(getBitmapFromURL(image));
         PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         final int icon = R.mipmap.ic_launcher;
         //Setup notification
@@ -52,9 +55,10 @@ public class GCMPushReceiverService extends GcmListenerService {
                 .setSound(sound)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, noBuilder.build()); //0 = ID of notification
     }
+
     public Bitmap getBitmapFromURL(String strURL) {
         try {
             URL url = new URL(strURL);

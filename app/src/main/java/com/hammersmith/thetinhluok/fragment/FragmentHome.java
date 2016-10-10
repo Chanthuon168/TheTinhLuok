@@ -57,6 +57,8 @@ public class FragmentHome extends Fragment {
     private ProgressDialog mProgressDialog;
     private int columns;
     private List<Banner> banners = new ArrayList<>();
+    private ViewBannerGallery viewBannerGallery;
+    private int sizeBanner;
 
     public FragmentHome() {
 
@@ -67,7 +69,7 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.content_container_view, container, false);
 
-        final ViewBannerGallery viewBannerGallery = (ViewBannerGallery) root.findViewById(R.id.viewBannerGallery);
+        viewBannerGallery = (ViewBannerGallery) root.findViewById(R.id.viewBannerGallery);
         final ArrayList<ViewBannerGallery.BannerItem> listData = new ArrayList<ViewBannerGallery.BannerItem>();
 
         ApiInterface serviceBanner = ApiClient.getClient().create(ApiInterface.class);
@@ -76,6 +78,7 @@ public class FragmentHome extends Fragment {
             @Override
             public void onResponse(Call<List<Banner>> call, Response<List<Banner>> response) {
                 banners = response.body();
+                sizeBanner = banners.size();
                 for (int i = 0; i < banners.size(); i++) {
                     listData.add(viewBannerGallery.new BannerItem(banners.get(i).getImage(), banners.get(i).getWebsite(), banners.get(i).getTitle()));
                 }
@@ -108,6 +111,9 @@ public class FragmentHome extends Fragment {
             public void onRefresh() {
                 refreshPromotion();
                 refreshProduct();
+                if (sizeBanner < 1) {
+                    refreshBanner();
+                }
             }
         });
 
@@ -168,6 +174,27 @@ public class FragmentHome extends Fragment {
         });
 
         return root;
+    }
+
+    private void refreshBanner() {
+        final ArrayList<ViewBannerGallery.BannerItem> listData = new ArrayList<ViewBannerGallery.BannerItem>();
+        ApiInterface serviceBanner = ApiClient.getClient().create(ApiInterface.class);
+        Call<List<Banner>> callBanner = serviceBanner.getBanner();
+        callBanner.enqueue(new Callback<List<Banner>>() {
+            @Override
+            public void onResponse(Call<List<Banner>> call, Response<List<Banner>> response) {
+                banners = response.body();
+                for (int i = 0; i < banners.size(); i++) {
+                    listData.add(viewBannerGallery.new BannerItem(banners.get(i).getImage(), banners.get(i).getWebsite(), banners.get(i).getTitle()));
+                }
+                viewBannerGallery.flip(listData, true);
+            }
+
+            @Override
+            public void onFailure(Call<List<Banner>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void dialogExit(String strMessage) {

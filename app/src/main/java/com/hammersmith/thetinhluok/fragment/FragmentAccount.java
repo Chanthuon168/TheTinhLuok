@@ -171,7 +171,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError volleyError) {
-                                Toast.makeText(getActivity(), " " + volleyError.toString(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), " " + volleyError.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }) {
                     @Override
@@ -196,7 +196,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Error while uploading image", Toast.LENGTH_SHORT).show();
+                dialogError("Error while updating account");
             }
         }) {
             @Override
@@ -378,5 +378,27 @@ public class FragmentAccount extends Fragment implements View.OnClickListener {
         if (dialog != null && dialog.isShowing()) {
             dialog.hide();
         }
+    }
+
+    private void dialogError(String strMessage) {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View viewDialog = factory.inflate(R.layout.layout_dialog_new, null);
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(viewDialog);
+        TextView message = (TextView) viewDialog.findViewById(R.id.message);
+        message.setText(strMessage);
+        IconTextView icon = (IconTextView) viewDialog.findViewById(R.id.icon);
+        icon.setText("{fa-exclamation-circle}");
+        TextView cancel = (TextView) viewDialog.findViewById(R.id.cancel);
+        cancel.setText("Try again");
+        viewDialog.findViewById(R.id.layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadFile();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

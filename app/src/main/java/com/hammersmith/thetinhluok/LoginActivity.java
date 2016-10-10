@@ -57,7 +57,7 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     private CallbackManager callbackManager;
     private AccessToken accessToken;
-    private String nameFb, emailFb, linkFb, nameGoogle, emailGoogle, linkGoogle, profileGoogle;
+    private String nameFb, emailFb, linkFb, nameGoogle, emailGoogle, linkGoogle, profileGoogle, strProfile;
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private User user;
@@ -182,6 +182,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             emailGoogle = acct.getEmail();
             linkGoogle = acct.getId();
             profileGoogle = String.valueOf(acct.getPhotoUrl());
+            if (profileGoogle.equals("null")){
+                profileGoogle = ApiClient.BASE_URL + "images/user.png";
+            }
             user = new User();
             user.setName(nameGoogle);
             user.setEmail(emailGoogle);

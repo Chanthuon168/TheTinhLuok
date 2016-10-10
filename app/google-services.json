@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "38732738414",
-    "firebase_url": "https://the-tinhluok-142905.firebaseio.com",
-    "project_id": "the-tinhluok-142905",
-    "storage_bucket": "the-tinhluok-142905.appspot.com"
+    "project_number": "982924203535",
+    "firebase_url": "https://the-tinhluok-fa078.firebaseio.com",
+    "project_id": "the-tinhluok-fa078",
+    "storage_bucket": "the-tinhluok-fa078.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:38732738414:android:3dff7529d712928d",
+        "mobilesdk_app_id": "1:982924203535:android:3dff7529d712928d",
         "android_client_info": {
           "package_name": "com.hammersmith.thetinhluok"
         }
       },
       "oauth_client": [
         {
-          "client_id": "38732738414-r9ji4pl9ub3tb7pushk9r45jtk4jpp7f.apps.googleusercontent.com",
+          "client_id": "982924203535-nkqfk533kcek8ok37o6e3pq40nud1v43.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hammersmith.thetinhluok",
@@ -23,15 +23,15 @@
           }
         },
         {
-          "client_id": "38732738414-l11r3arptr1bbgt9kmrg6net8ihq565c.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "38732738414-5r4iccc6ctrflebkcv5o761pu2724rdl.apps.googleusercontent.com",
+          "client_id": "982924203535-3780t9igh5j33u39c4b1tlq8m4i66542.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-      "api_key": [{ "current_key": "AIzaSyBkwaAYZphnWT_h4_Xx9wHQyA1Km6iHtjc" }],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjXKS6khhWIHNtt1x0WbtZEE3hCqj5BGo"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "38732738414-l11r3arptr1bbgt9kmrg6net8ihq565c.apps.googleusercontent.com",
+              "client_id": "982924203535-3780t9igh5j33u39c4b1tlq8m4i66542.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
